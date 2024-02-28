@@ -176,13 +176,19 @@ contract PeerReviewTest is Test {
     //     assertEq(reviewer4Keywords[reviewer4Keywords.length - 1], "fees");
     // }
 
-    // Test for the submitData function
-    function testSubmitData() public {
-        string
-            memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
-        uint256 submissionId = submitData();
-        (, string memory data) = peerReview.getSubmission(submissionId);
-        assertEq(data, testData);
+    // Test for the submitData function with two specific submissions
+    function testSubmitDataWithSpecificContexts() public {
+        // First submission: Reflecting a DAO voter's preference to raise collateral threshold
+        string memory testData1 = "As a DAO voter, I prefer to raise the collateral threshold to ensure more commitment from proposal submitters.";
+        uint256 submissionId1 = peerReview.submitData(testData1);
+        (, string memory data1,,,) = peerReview.getSubmission(submissionId1);
+        assertEq(data1, testData1, "Mismatch in first submission data");
+
+        // Second submission: Checking if the DAO proposal team has previously worked together
+        string memory testData2 = "The DAO proposal team should describe their previous collaborations to demonstrate their ability to work together effectively.";
+        uint256 submissionId2 = peerReview.submitData(testData2);
+        (, string memory data2,,,) = peerReview.getSubmission(submissionId2);
+        assertEq(data2, testData2, "Mismatch in second submission data");
     }
 
     // // Test for the getAuthors function
