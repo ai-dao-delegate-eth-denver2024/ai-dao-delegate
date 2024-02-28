@@ -59,6 +59,20 @@ contract PeerReview {
         return (reviewer.addr, reviewer.keywords);
     }
 
+    // Function to get a reviewer's information by address
+    function getReviewerByAddress(address reviewerAddress)
+        public
+        view
+        returns (address, string[] memory)
+    {
+        for (uint256 i = 0; i < reviewers.length; i++) {
+            if (reviewers[i].addr == reviewerAddress) {
+                return (reviewers[i].addr, reviewers[i].keywords);
+            }
+        }
+        revert("Reviewer not found.");
+    }
+
     // Function to add a keyword to a reviewer
     function addKeywordToReviewer(uint256 reviewerIndex, string memory keyword)
         public
