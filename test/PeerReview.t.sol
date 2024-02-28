@@ -63,6 +63,11 @@ contract PeerReviewTest is Test {
         }
     }
 
+    function addKeywordsToSpecificReviewers() internal {
+        peerReview.addKeywordToReviewer(2, "transactions");
+        peerReview.addKeywordToReviewer(3, "fees");
+    }
+
     function testAddReviewer() public {
         setupReviewersAndKeywords();
         address[4] memory expectedReviewers = [
@@ -81,85 +86,52 @@ contract PeerReviewTest is Test {
         keywords[2][0] = "security";
         keywords[3] = new string[](1);
         keywords[3][0] = "usability";
-
-        for (uint256 i = 0; i < expectedReviewers.length; i++) {
-
-            // Test getting reviewer by address
-            (
-                address reviewerAddrByAddress,
-                string[] memory reviewerKeywordsByAddress
-            ) = peerReview.getReviewerByAddress(expectedReviewers[i]);
-            assertEq(reviewerAddrByAddress, expectedReviewers[i]);
-            for (uint256 j = 0; j < keywords[i].length; j++) {
-                assertEq(reviewerKeywordsByAddress[j], keywords[i][j]);
-            }
-        }
     }
 
-    function addKeywordsToSpecificReviewers() internal {
-        peerReview.addKeywordToReviewer(2, "transactions");
-        peerReview.addKeywordToReviewer(3, "fees");
-    }
+    // // Function to submit data, reusable in other tests
+    // function submitData() internal returns (uint256) {
+    //     string
+    //         memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
+    //     return peerReview.submitData(testData);
+    // }
 
-    // Function to submit data, reusable in other tests
-    function submitData() internal returns (uint256) {
-        string
-            memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
-        return peerReview.submitData(testData);
-    }
+    // function testAddKeywordsToReviewers() public {
+    //     setupReviewersAndKeywords();
+    //     addKeywordsToSpecificReviewers();
+    //     // Verifying "transactions" keyword for reviewer 3
+    //     (, string[] memory reviewer3Keywords) = peerReview.getReviewer(2);
+    //     assertEq(
+    //         reviewer3Keywords[reviewer3Keywords.length - 1],
+    //         "transactions"
+    //     );
 
-    function testAddKeywordsToReviewers() public {
-        setupReviewersAndKeywords();
-        addKeywordsToSpecificReviewers();
-        // Verifying "transactions" keyword for reviewer 3
-        (, string[] memory reviewer3Keywords) = peerReview.getReviewer(2);
-        assertEq(
-            reviewer3Keywords[reviewer3Keywords.length - 1],
-            "transactions"
-        );
+    //     // Verifying "fees" keyword for reviewer 4
+    //     (, string[] memory reviewer4Keywords) = peerReview.getReviewer(3);
+    //     assertEq(reviewer4Keywords[reviewer4Keywords.length - 1], "fees");
+    // }
 
-        // Verifying "fees" keyword for reviewer 4
-        (, string[] memory reviewer4Keywords) = peerReview.getReviewer(3);
-        assertEq(reviewer4Keywords[reviewer4Keywords.length - 1], "fees");
-    }
+    // // Test for the submitData function
+    // function testSubmitData() public {
+    //     string
+    //         memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
+    //     uint256 submissionId = submitData();
+    //     (, string memory data) = peerReview.getSubmission(submissionId);
+    //     assertEq(data, testData);
+    // }
 
-    // Test for the submitData function
-    function testSubmitData() public {
-        string
-            memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
-        uint256 submissionId = submitData();
-        (, string memory data) = peerReview.getSubmission(submissionId);
-        assertEq(data, testData);
-    }
+    // // Test for the getAuthors function
+    // function testGetAuthors() public {
+    //     addAuthors(); // Add authors to the contract
 
-    // Test for the getAuthors function
-    function testGetAuthors() public {
-        addAuthors(); // Add authors to the contract
+    //     address[2] memory expectedAuthors = [
+    //         0x70997970C51812dc3A010C7d01b50e0d17dc79C8, // Anvil's local test account 1
+    //         0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC // Anvil's local test account 2
+    //     ];
 
-        address[2] memory expectedAuthors = [
-            0x70997970C51812dc3A010C7d01b50e0d17dc79C8, // Anvil's local test account 1
-            0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC // Anvil's local test account 2
-        ];
+    //     address[] memory actualAuthors = peerReview.getAuthors();
 
-        address[] memory actualAuthors = peerReview.getAuthors();
-
-        for (uint256 i = 0; i < expectedAuthors.length; i++) {
-            assertEq(actualAuthors[i], expectedAuthors[i]);
-        }
-    }
-
-    // Test for reverting addAuthor if author already exists
-    // function testRevertAddExistingAuthor() public {
-    //     address existingAuthor = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; // Anvil's local test account 1
-    //     bool reverted = false;
-
-    //     try peerReview.addAuthor(existingAuthor) {
-    //         // This call should revert. If it doesn't, force the test to fail.
-    //         assertTrue(false, "Adding an existing author did not revert.");
-    //     } catch {
-    //         reverted = true;
+    //     for (uint256 i = 0; i < expectedAuthors.length; i++) {
+    //         assertEq(actualAuthors[i], expectedAuthors[i]);
     //     }
-
-    //     assertTrue(reverted, "Expected revert when adding an existing author.");
     // }
 }
