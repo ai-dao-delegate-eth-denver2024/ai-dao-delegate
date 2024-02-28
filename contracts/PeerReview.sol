@@ -50,8 +50,14 @@ contract PeerReview {
     }
 
     // Function to add keywords to a specific reviewer, only callable by the owner
-    function addKeywordToReviewer(uint256 reviewerIndex, string memory newKeyword) public {
-        require(msg.sender == owner, "Only the owner can add keywords to a reviewer.");
+    function addKeywordToReviewer(
+        uint256 reviewerIndex,
+        string memory newKeyword
+    ) public {
+        require(
+            msg.sender == owner,
+            "Only the owner can add keywords to a reviewer."
+        );
         require(reviewerIndex < reviewers.length, "Reviewer does not exist.");
         reviewers[reviewerIndex].keywords.push(newKeyword);
     }
@@ -72,7 +78,11 @@ contract PeerReview {
     }
 
     // Function to get a reviewer's keywords by address
-    function getReviewerKeywords(address _reviewerAddress) public view returns (string[] memory) {
+    function getReviewerKeywords(address _reviewerAddress)
+        public
+        view
+        returns (string[] memory)
+    {
         for (uint256 i = 0; i < reviewers.length; i++) {
             if (reviewers[i].addr == _reviewerAddress) {
                 return reviewers[i].keywords;
@@ -90,17 +100,17 @@ contract PeerReview {
         return reviewerAddresses;
     }
 
-    // // Submit a data object
-    // function submitData(string memory _data) public returns (uint256) {
-    //     Submission storage newSubmission = submissions.push();
-    //     newSubmission.author = msg.sender;
-    //     newSubmission.data = _data;
-    //     uint256 submissionId = submissions.length - 1;
-    //     emit SubmissionCreated(submissionId);
-    //     return submissionId;
-    // }
+    // Submit a data object
+    function submitData(string memory _data) public returns (uint256) {
+        Submission storage newSubmission = submissions.push();
+        newSubmission.author = msg.sender;
+        newSubmission.data = _data;
+        uint256 submissionId = submissions.length - 1;
+        emit SubmissionCreated(submissionId);
+        return submissionId;
+    }
 
-    // event SubmissionCreated(uint256 submissionId);
+    event SubmissionCreated(uint256 submissionId);
 
     // // Function to get a submission's data by its ID
     // function getSubmission(uint256 submissionId)

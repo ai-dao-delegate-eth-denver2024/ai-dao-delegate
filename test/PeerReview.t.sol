@@ -151,10 +151,7 @@ contract PeerReviewTest is Test {
         }
 
         // Assert that the new reviewer was successfully added
-        assertTrue(
-            foundNewReviewer,
-            "New reviewer was not added."
-        );
+        assertTrue(foundNewReviewer, "New reviewer was not added.");
     }
 
     // // Function to submit data, reusable in other tests
@@ -179,14 +176,14 @@ contract PeerReviewTest is Test {
     //     assertEq(reviewer4Keywords[reviewer4Keywords.length - 1], "fees");
     // }
 
-    // // Test for the submitData function
-    // function testSubmitData() public {
-    //     string
-    //         memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
-    //     uint256 submissionId = submitData();
-    //     (, string memory data) = peerReview.getSubmission(submissionId);
-    //     assertEq(data, testData);
-    // }
+    // Test for the submitData function
+    function testSubmitData() public {
+        string
+            memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
+        uint256 submissionId = submitData();
+        (, string memory data) = peerReview.getSubmission(submissionId);
+        assertEq(data, testData);
+    }
 
     // // Test for the getAuthors function
     // function testGetAuthors() public {
