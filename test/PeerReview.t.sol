@@ -154,56 +154,24 @@ contract PeerReviewTest is Test {
         assertTrue(foundNewReviewer, "New reviewer was not added.");
     }
 
-    // // Function to submit data, reusable in other tests
-    // function submitData() internal returns (uint256) {
-    //     string
-    //         memory testData = "I'd like to have channels with sponsors in discord to be functioning on the first day of the hackathon";
-    //     return peerReview.submitData(testData);
-    // }
-
-    // function testAddKeywordsToReviewers() public {
-    //     setupReviewersAndKeywords();
-    //     addKeywordsToSpecificReviewers();
-    //     // Verifying "transactions" keyword for reviewer 3
-    //     (, string[] memory reviewer3Keywords) = peerReview.getReviewer(2);
-    //     assertEq(
-    //         reviewer3Keywords[reviewer3Keywords.length - 1],
-    //         "transactions"
-    //     );
-
-    //     // Verifying "fees" keyword for reviewer 4
-    //     (, string[] memory reviewer4Keywords) = peerReview.getReviewer(3);
-    //     assertEq(reviewer4Keywords[reviewer4Keywords.length - 1], "fees");
-    // }
-
     // Test for the submitData function with two specific submissions
     function testSubmitDataWithSpecificContexts() public {
         // First submission: Reflecting a DAO voter's preference to raise collateral threshold
-        string memory testData1 = "As a DAO voter, I prefer to raise the collateral threshold to ensure more commitment from proposal submitters.";
+        string
+            memory testData1 = "As a DAO voter, I prefer to raise the collateral threshold to ensure more commitment from proposal submitters.";
         uint256 submissionId1 = peerReview.submitData(testData1);
-        (, string memory data1,,,) = peerReview.getSubmission(submissionId1);
+        (, string memory data1, , , , ) = peerReview.getSubmission(
+            submissionId1
+        );
         assertEq(data1, testData1, "Mismatch in first submission data");
 
         // Second submission: Checking if the DAO proposal team has previously worked together
-        string memory testData2 = "The DAO proposal team should describe their previous collaborations to demonstrate their ability to work together effectively.";
+        string
+            memory testData2 = "The DAO proposal team should describe their previous collaborations to demonstrate their ability to work together effectively.";
         uint256 submissionId2 = peerReview.submitData(testData2);
-        (, string memory data2,,,) = peerReview.getSubmission(submissionId2);
+        (, string memory data2, , , , ) = peerReview.getSubmission(
+            submissionId2
+        );
         assertEq(data2, testData2, "Mismatch in second submission data");
     }
-
-    // // Test for the getAuthors function
-    // function testGetAuthors() public {
-    //     addAuthors(); // Add authors to the contract
-
-    //     address[2] memory expectedAuthors = [
-    //         0x70997970C51812dc3A010C7d01b50e0d17dc79C8, // Anvil's local test account 1
-    //         0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC // Anvil's local test account 2
-    //     ];
-
-    //     address[] memory actualAuthors = peerReview.getAuthors();
-
-    //     for (uint256 i = 0; i < expectedAuthors.length; i++) {
-    //         assertEq(actualAuthors[i], expectedAuthors[i]);
-    //     }
-    // }
 }
