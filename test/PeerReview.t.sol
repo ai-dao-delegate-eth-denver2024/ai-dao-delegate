@@ -154,7 +154,9 @@ contract PeerReviewTest is Test {
 
         peerReview.addReviewer(testReviewer, testKeywords);
 
-        (address retrievedReviewer, string[] memory retrievedKeywords) = peerReview.getReviewer(reviewers.length - 1);
+        // Assuming this is the first reviewer being added, the index is 0.
+        // Adjust the index accordingly if there are other reviewers added before this test.
+        (address retrievedReviewer, string[] memory retrievedKeywords) = peerReview.getReviewer(0);
         assertEq(retrievedReviewer, testReviewer);
         for (uint256 i = 0; i < testKeywords.length; i++) {
             assertEq(retrievedKeywords[i], testKeywords[i]);
