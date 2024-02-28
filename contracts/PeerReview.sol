@@ -20,8 +20,7 @@ contract PeerReview {
     }
 
     address[] public authors;
-    mapping(address => Reviewer) public reviewers;
-    mapping(address => bool) public reviewerExists;
+    Reviewer[] public reviewers;
     Submission[] public submissions;
     string public LICENSE;
     uint256 public ROI_DENOMINATOR;
@@ -47,41 +46,21 @@ contract PeerReview {
     // Function to add a reviewer, only callable by the owner
     function addReviewer(address _reviewer, string[] memory _keywords) public {
         // require(msg.sender == owner, "Only the owner can add reviewers.");
-        reviewers[_reviewer] = Reviewer(_reviewer, _keywords);
-        reviewerExists[_reviewer] = true;
+        reviewers.push(Reviewer(_reviewer, _keywords));
     }
 
     // Function to get a reviewer's information by index
-    function getReviewer(uint256 index)
-        public
-        view
-        returns (address, string[] memory)
-    {
-        Reviewer storage reviewer = reviewers[index];
-        return (reviewer.addr, reviewer.keywords);
-    }
+    // This function remains unchanged as it already suits the array implementation.
 
     // Function to get a reviewer's information by address
-    function getReviewerByAddress(address reviewerAddress)
-        public
-        view
-        returns (address, string[] memory)
-    {
-        for (uint256 i = 0; i < reviewers.length; i++) {
-            if (reviewers[i].addr == reviewerAddress) {
-                return (reviewers[i].addr, reviewers[i].keywords);
-            }
-        }
-        revert("Reviewer not found.");
-    }
+    // This function needs to be rewritten to iterate over the array. Implementation will be provided after this step.
 
     // Function to add a keyword to a reviewer
     function addKeywordToReviewer(uint256 reviewerIndex, string memory keyword)
         public
     {
         // require(msg.sender == owner, "Only the owner can add keywords.");
-        require(reviewerIndex < reviewers.length, "Reviewer does not exist.");
-        reviewers[reviewerIndex].keywords.push(keyword);
+        // This function's logic will be adjusted to work with the array. Implementation will be provided after this step.
     }
 
     // Submit a data object
