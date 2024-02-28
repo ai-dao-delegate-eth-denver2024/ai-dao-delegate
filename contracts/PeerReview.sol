@@ -67,9 +67,12 @@ contract PeerReview {
         view
         returns (address, string[] memory)
     {
-        require(reviewerExists[reviewerAddress], "Reviewer not found.");
-        Reviewer storage reviewer = reviewers[reviewerAddress];
-        return (reviewer.addr, reviewer.keywords);
+        for (uint256 i = 0; i < reviewers.length; i++) {
+            if (reviewers[i].addr == reviewerAddress) {
+                return (reviewers[i].addr, reviewers[i].keywords);
+            }
+        }
+        revert("Reviewer not found.");
     }
 
     // Function to add a keyword to a reviewer
