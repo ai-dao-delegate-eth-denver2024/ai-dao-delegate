@@ -63,6 +63,21 @@ contract PeerReviewTest is Test {
         }
     }
 
+    function testGetReviewerKeywords() public {
+        setupReviewersAndKeywords(); // Ensure there are reviewers with keywords
+
+        // Test getting keywords for a specific reviewer
+        address reviewerAddress = 0x90F79bf6EB2c4f870365E785982E1f101E93b906; // Anvil's local test account 3
+        string[] memory expectedKeywords = new string[](1);
+        expectedKeywords[0] = "gasless";
+
+        string[] memory actualKeywords = peerReview.getReviewerKeywords(reviewerAddress);
+
+        for (uint256 i = 0; i < expectedKeywords.length; i++) {
+            assertEq(actualKeywords[i], expectedKeywords[i], "Mismatch in reviewer keywords");
+        }
+    }
+
     function addKeywordsToSpecificReviewers() internal {
         peerReview.addKeywordToReviewer(2, "transactions");
         peerReview.addKeywordToReviewer(3, "fees");
