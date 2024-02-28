@@ -206,6 +206,15 @@ contract PeerReview {
         return authors;
     }
 
+    // Function to get all reviewers' addresses
+    function getReviewers() public view returns (address[] memory) {
+        address[] memory reviewerAddresses = new address[](reviewers.length);
+        for (uint256 i = 0; i < reviewers.length; i++) {
+            reviewerAddresses[i] = reviewers[i].addr;
+        }
+        return reviewerAddresses;
+    }
+
     // https://docs.inco.org/getting-started/example-dapps/private-voting
     function castVote(bytes calldata encryptedVoteCount) public {}
 
