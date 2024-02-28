@@ -49,17 +49,11 @@ contract PeerReview {
         reviewers.push(Reviewer(_reviewer, _keywords));
     }
 
-    // Updated function for reviewers to add their keywords
-    function addKeywords(string[] memory _keywords) public {
-        bool isReviewer = false;
-        for (uint256 i = 0; i < reviewers.length; i++) {
-            if (reviewers[i].addr == msg.sender) {
-                reviewers[i].keywords = _keywords;
-                isReviewer = true;
-                break;
-            }
-        }
-        require(isReviewer, "Caller is not a reviewer.");
+    // Function to add keywords to a specific reviewer, only callable by the owner
+    function addKeywordToReviewer(uint256 reviewerIndex, string memory newKeyword) public {
+        require(msg.sender == owner, "Only the owner can add keywords to a reviewer.");
+        require(reviewerIndex < reviewers.length, "Reviewer does not exist.");
+        reviewers[reviewerIndex].keywords.push(newKeyword);
     }
 
     // Function to get selected reviewers for a submission
