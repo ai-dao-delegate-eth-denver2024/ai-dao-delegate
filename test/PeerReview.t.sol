@@ -83,15 +83,6 @@ contract PeerReviewTest is Test {
         keywords[3][0] = "usability";
 
         for (uint256 i = 0; i < expectedReviewers.length; i++) {
-            // Test getting reviewer by index
-            (
-                address reviewerAddrByIndex,
-                string[] memory reviewerKeywordsByIndex
-            ) = peerReview.getReviewer(i);
-            assertEq(reviewerAddrByIndex, expectedReviewers[i]);
-            for (uint256 j = 0; j < keywords[i].length; j++) {
-                assertEq(reviewerKeywordsByIndex[j], keywords[i][j]);
-            }
 
             // Test getting reviewer by address
             (

@@ -20,7 +20,8 @@ contract PeerReview {
     }
 
     address[] public authors;
-    Reviewer[] public reviewers;
+    mapping(address => Reviewer) public reviewers;
+    mapping(address => bool) public reviewerExists;
     Submission[] public submissions;
     string public LICENSE;
     uint256 public ROI_DENOMINATOR;
@@ -46,7 +47,8 @@ contract PeerReview {
     // Function to add a reviewer, only callable by the owner
     function addReviewer(address _reviewer, string[] memory _keywords) public {
         // require(msg.sender == owner, "Only the owner can add reviewers.");
-        reviewers.push(Reviewer(_reviewer, _keywords));
+        reviewers[_reviewer] = Reviewer(_reviewer, _keywords);
+        reviewerExists[_reviewer] = true;
     }
 
     // Function to get a reviewer's information by index
@@ -65,12 +67,9 @@ contract PeerReview {
         view
         returns (address, string[] memory)
     {
-        for (uint256 i = 0; i < reviewers.length; i++) {
-            if (reviewers[i].addr == reviewerAddress) {
-                return (reviewers[i].addr, reviewers[i].keywords);
-            }
-        }
-        revert("Reviewer not found.");
+        require(reviewerExists[reviewerAddress], "Reviewer not found.");
+        Reviewer storage reviewer = reviewers[reviewerAddress];
+        return (reviewer.addr, reviewer.keywords);
     }
 
     // Function to add a keyword to a reviewer
