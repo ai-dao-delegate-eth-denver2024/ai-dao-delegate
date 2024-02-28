@@ -10,9 +10,6 @@ contract PeerReview {
     struct Submission {
         address author;
         string data;
-        mapping(address => bytes32) commits;
-        mapping(address => bool) votes;
-        mapping(address => bool) comments;
         address[] selectedReviewers;
         address[] shuffledReviewers; // Updated field to store shuffled reviewers
         bool isApproved;
