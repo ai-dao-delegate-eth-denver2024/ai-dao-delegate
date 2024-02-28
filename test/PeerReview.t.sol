@@ -146,6 +146,21 @@ contract PeerReviewTest is Test {
         }
     }
 
+    // Test for the addReviewer function
+    function testAddReviewer() public {
+        address testReviewer = 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65; // Anvil's local test account 4
+        string[] memory testKeywords = new string[](1);
+        testKeywords[0] = "testKeyword";
+
+        peerReview.addReviewer(testReviewer, testKeywords);
+
+        (address retrievedReviewer, string[] memory retrievedKeywords) = peerReview.getReviewer(reviewers.length - 1);
+        assertEq(retrievedReviewer, testReviewer);
+        for (uint256 i = 0; i < testKeywords.length; i++) {
+            assertEq(retrievedKeywords[i], testKeywords[i]);
+        }
+    }
+
     // Test for reverting addAuthor if author already exists
     // function testRevertAddExistingAuthor() public {
     //     address existingAuthor = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; // Anvil's local test account 1
