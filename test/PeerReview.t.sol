@@ -127,23 +127,34 @@ contract PeerReviewTest is Test {
     }
 
     function testAddReviewer() public {
+        // Setup initial reviewers and keywords
         setupReviewersAndKeywords();
-        address[4] memory expectedReviewers = [
-            0x90F79bf6EB2c4f870365E785982E1f101E93b906, // Anvil's local test account 3
-            0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65, // Anvil's local test account 4
-            0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc, // Anvil's local test account 5
-            0x976EA74026E726554dB657fA54763abd0C3a0aa9 // Anvil's local test account 6
-        ];
 
-        string[][] memory keywords = new string[][](4);
-        keywords[0] = new string[](1);
-        keywords[0][0] = "gasless";
-        keywords[1] = new string[](1);
-        keywords[1][0] = "scalability";
-        keywords[2] = new string[](1);
-        keywords[2][0] = "security";
-        keywords[3] = new string[](1);
-        keywords[3][0] = "usability";
+        // New reviewer to be added
+        address newReviewer = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2; // Anvil's local test account 7
+        string[] memory newKeywords = new string[](1);
+        newKeywords[0] = "innovation";
+
+        // Add a new reviewer
+        peerReview.addReviewer(newReviewer, newKeywords);
+
+        // Retrieve the updated list of reviewers
+        address[] memory updatedReviewers = peerReview.getReviewers();
+
+        // Check if the new reviewer is in the updated list
+        bool foundNewReviewer = false;
+        for (uint256 i = 0; i < updatedReviewers.length; i++) {
+            if (updatedReviewers[i] == newReviewer) {
+                foundNewReviewer = true;
+                break;
+            }
+        }
+
+        // Assert that the new reviewer was successfully added
+        assertTrue(
+            foundNewReviewer,
+            "New reviewer was not added."
+        );
     }
 
     // // Function to submit data, reusable in other tests
