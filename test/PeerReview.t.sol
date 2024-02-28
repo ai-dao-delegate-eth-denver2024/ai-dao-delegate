@@ -89,7 +89,7 @@ contract PeerReviewTest is Test {
             0x90F79bf6EB2c4f870365E785982E1f101E93b906, // Anvil's local test account 3
             0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65, // Anvil's local test account 4
             0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc, // Anvil's local test account 5
-            0x976EA74026E726554dB657fA54763abd0C3a0aa9  // Anvil's local test account 6
+            0x976EA74026E726554dB657fA54763abd0C3a0aa9 // Anvil's local test account 6
         ];
 
         // Setup initial reviewers and keywords
@@ -124,53 +124,6 @@ contract PeerReviewTest is Test {
             foundNewKeyword,
             "New keyword was not added to the reviewer."
         );
-    }
-
-    function testAddKeywordToReviewer() public {
-        address[4] memory reviewers = [
-            0x90F79bf6EB2c4f870365E785982E1f101E93b906, // Anvil's local test account 3
-            0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65, // Anvil's local test account 4
-            0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc, // Anvil's local test account 5
-            0x976EA74026E726554dB657fA54763abd0C3a0aa9  // Anvil's local test account 6
-        ];
-
-        // Setup initial reviewers and keywords
-        setupReviewersAndKeywords();
-
-        // Index of the reviewer to add a keyword to
-        uint256 reviewerIndex = 1; // Assuming this is the index of the reviewer we want to modify
-        string memory newKeyword = "performance";
-
-        // Add a new keyword to the specified reviewer
-        peerReview.addKeywordToReviewer(reviewerIndex, newKeyword);
-
-        // Retrieve the updated keywords list for the reviewer
-        string[] memory updatedKeywords = peerReview.getReviewerKeywords(
-            reviewers[reviewerIndex]
-        );
-
-        // Check if the new keyword is in the updated list
-        bool foundNewKeyword = false;
-        for (uint256 i = 0; i < updatedKeywords.length; i++) {
-            if (
-                keccak256(bytes(updatedKeywords[i])) ==
-                keccak256(bytes(newKeyword))
-            ) {
-                foundNewKeyword = true;
-                break;
-            }
-        }
-
-        // Assert that the new keyword was successfully added
-        assertTrue(
-            foundNewKeyword,
-            "New keyword was not added to the reviewer."
-        );
-    }
-
-    function addKeywordsToSpecificReviewers() internal {
-        peerReview.addKeywordToReviewer(2, "transactions");
-        peerReview.addKeywordToReviewer(3, "fees");
     }
 
     function testAddReviewer() public {
