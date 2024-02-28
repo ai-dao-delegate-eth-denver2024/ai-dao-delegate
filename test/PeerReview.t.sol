@@ -71,11 +71,87 @@ contract PeerReviewTest is Test {
         string[] memory expectedKeywords = new string[](1);
         expectedKeywords[0] = "gasless";
 
-        string[] memory actualKeywords = peerReview.getReviewerKeywords(reviewerAddress);
+        string[] memory actualKeywords = peerReview.getReviewerKeywords(
+            reviewerAddress
+        );
 
         for (uint256 i = 0; i < expectedKeywords.length; i++) {
-            assertEq(actualKeywords[i], expectedKeywords[i], "Mismatch in reviewer keywords");
+            assertEq(
+                actualKeywords[i],
+                expectedKeywords[i],
+                "Mismatch in reviewer keywords"
+            );
         }
+    }
+
+    function testAddKeywordToReviewer() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Index of the reviewer to add a keyword to
+        uint256 reviewerIndex = 1; // Assuming this is the index of the reviewer we want to modify
+        string memory newKeyword = "performance";
+
+        // Add a new keyword to the specified reviewer
+        peerReview.addKeywordToReviewer(reviewerIndex, newKeyword);
+
+        // Retrieve the updated keywords list for the reviewer
+        string[] memory updatedKeywords = peerReview.getReviewerKeywords(
+            reviewers[reviewerIndex]
+        );
+
+        // Check if the new keyword is in the updated list
+        bool foundNewKeyword = false;
+        for (uint256 i = 0; i < updatedKeywords.length; i++) {
+            if (
+                keccak256(bytes(updatedKeywords[i])) ==
+                keccak256(bytes(newKeyword))
+            ) {
+                foundNewKeyword = true;
+                break;
+            }
+        }
+
+        // Assert that the new keyword was successfully added
+        assertTrue(
+            foundNewKeyword,
+            "New keyword was not added to the reviewer."
+        );
+    }
+
+    function testAddKeywordToReviewer() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Index of the reviewer to add a keyword to
+        uint256 reviewerIndex = 1; // Assuming this is the index of the reviewer we want to modify
+        string memory newKeyword = "performance";
+
+        // Add a new keyword to the specified reviewer
+        peerReview.addKeywordToReviewer(reviewerIndex, newKeyword);
+
+        // Retrieve the updated keywords list for the reviewer
+        string[] memory updatedKeywords = peerReview.getReviewerKeywords(
+            reviewers[reviewerIndex]
+        );
+
+        // Check if the new keyword is in the updated list
+        bool foundNewKeyword = false;
+        for (uint256 i = 0; i < updatedKeywords.length; i++) {
+            if (
+                keccak256(bytes(updatedKeywords[i])) ==
+                keccak256(bytes(newKeyword))
+            ) {
+                foundNewKeyword = true;
+                break;
+            }
+        }
+
+        // Assert that the new keyword was successfully added
+        assertTrue(
+            foundNewKeyword,
+            "New keyword was not added to the reviewer."
+        );
     }
 
     function addKeywordsToSpecificReviewers() internal {
@@ -150,29 +226,3 @@ contract PeerReviewTest is Test {
     //     }
     // }
 }
-    function testAddKeywordToReviewer() public {
-        // Setup initial reviewers and keywords
-        setupReviewersAndKeywords();
-
-        // Index of the reviewer to add a keyword to
-        uint256 reviewerIndex = 1; // Assuming this is the index of the reviewer we want to modify
-        string memory newKeyword = "performance";
-
-        // Add a new keyword to the specified reviewer
-        peerReview.addKeywordToReviewer(reviewerIndex, newKeyword);
-
-        // Retrieve the updated keywords list for the reviewer
-        string[] memory updatedKeywords = peerReview.getReviewerKeywords(reviewers[reviewerIndex]);
-
-        // Check if the new keyword is in the updated list
-        bool foundNewKeyword = false;
-        for (uint256 i = 0; i < updatedKeywords.length; i++) {
-            if (keccak256(bytes(updatedKeywords[i])) == keccak256(bytes(newKeyword))) {
-                foundNewKeyword = true;
-                break;
-            }
-        }
-
-        // Assert that the new keyword was successfully added
-        assertTrue(foundNewKeyword, "New keyword was not added to the reviewer.");
-    }
