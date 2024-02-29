@@ -263,7 +263,7 @@ contract PeerReview {
             }
         }
 
-        return finalTopReviewers;
+        return topReviewers;
     }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
