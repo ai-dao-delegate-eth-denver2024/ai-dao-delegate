@@ -137,10 +137,11 @@ contract PeerReview {
         );
     }
 
-    // Function to assign a random seed to a submission
-    function assignRndSeed(uint256 submissionId, uint256 seed) public {
+    // Function to assign a random seed to a submission using getRandomNumber
+    function assignRandomSeedToSubmission(uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
-        submissions[submissionId].seed = seed;
+        uint256 randomSeed = getRandomNumber();
+        submissions[submissionId].seed = randomSeed;
     }
 
     // Function to get shuffled reviewers for a submission
