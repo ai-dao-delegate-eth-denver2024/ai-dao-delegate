@@ -199,6 +199,12 @@ contract PeerReview {
         return false;
     }
 
+    // Function to generate a pseudo-random number based on block timestamp and sender's address
+    function getRandomNumber() public view returns (uint256) {
+        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender)));
+        return seed;
+    }
+
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
     // function castVote(bytes calldata encryptedVoteCount) public {}
 
