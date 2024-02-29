@@ -341,7 +341,7 @@ contract PeerReviewTest is Test {
         // Optionally, assert that the top reviewers are the expected ones based on the submission's content
         // This part can be more specific based on the setup of reviewers and keywords
     }
-}
+
     // Test for initializing voting, casting a vote, and getting the tally
     function testFheVotingProcess() public {
         // Initialize the voting
@@ -357,6 +357,14 @@ contract PeerReviewTest is Test {
 
         // Assert that the tally for "Yes" is 1
         // Note: This is a simplified assertion. In a real scenario, you would decrypt the tally result to verify the count.
-        assertEq(tallyResults.length, 2, "There should be two options in the tally.");
-        assertTrue(tallyResults[0].length > 0, "The tally for 'Yes' should be greater than 0.");
+        assertEq(
+            tallyResults.length,
+            2,
+            "There should be two options in the tally."
+        );
+        assertTrue(
+            tallyResults[0].length > 0,
+            "The tally for 'Yes' should be greater than 0."
+        );
     }
+}

@@ -305,6 +305,20 @@ contract PeerReview {
         fheAddToTally(option, TFHE.asEuint32(1));
     }
 
+    function fheGetTallyPt(bytes32 publicKey)
+        public
+        view
+        returns (uint32, uint32)
+    {
+        uint32[2] memory tallyResp;
+        for (uint8 i = 0; i < encOptions.length; i++) {
+            tallyResp[i] += TFHE.decrypt(tally[i]);
+            // tallyResp[i] = (TFHE.reencrypt(tally[i], publicKey));
+        }
+
+        return (tallyResp[0], tallyResp[1]);
+    }
+
     function fheGetTally(bytes32 publicKey)
         public
         view
@@ -312,7 +326,8 @@ contract PeerReview {
     {
         bytes[] memory tallyResp = new bytes[](encOptions.length);
         for (uint8 i = 0; i < encOptions.length; i++) {
-            tallyResp[i] = (TFHE.reencrypt(tally[i], publicKey));
+            tallyResp[i] = (TFHE.reencrypt(tally[i], 0x00));
+            // tallyResp[i] = (TFHE.reencrypt(tally[i], publicKey));
         }
 
         return tallyResp;
@@ -328,70 +343,6 @@ contract PeerReview {
             tally[i] = TFHE.add(tally[i], toAdd);
         }
     }
-
-    // euint8[] internal encOptions;
-
-    // // Initialize voting for a submission with predefined options
-    // function initVoting(uint256 submissionId, string[] memory optList) public {
-    //     require(optList.length <= MAX_OPTIONS, "Too many options!");
-    //     for (uint8 i = 0; i < optList.length; i++) {
-    //         tally[submissionId][i] = TFHE.asEuint32(0);
-    //         encOptions.push(TFHE.asEuint8(i));
-    //     }
-    // }
-
-    // // Cast an encrypted vote for a submission
-    // function vote(uint256 submissionId, bytes memory encOption) public {
-    //     euint8 option = TFHE.asEuint8(encOption);
-    //     euint8 isValid = TFHE.or(
-    //         TFHE.eq(option, encOptions[0]),
-    //         TFHE.eq(option, encOptions[1])
-    //     );
-    //     for (uint256 i = 1; i < encOptions.length; i++) {
-    //         TFHE.or(isValid, TFHE.eq(option, encOptions[i + 1]));
-    //     }
-    //     TFHE.req(isValid);
-
-    //     if (TFHE.isInitialized(votes[submissionId][msg.sender])) {
-    //         addToTally(
-    //             submissionId,
-    //             votes[submissionId][msg.sender],
-    //             TFHE.asEuint32(MAX_INT)
-    //         ); // Revert old vote
-    //     }
-
-    //     votes[submissionId][msg.sender] = option;
-    //     addToTally(submissionId, option, TFHE.asEuint32(1));
-    // }
-
-    // // Internal function to add to the tally
-    // function addToTally(
-    //     uint256 submissionId,
-    //     euint8 option,
-    //     euint32 amount
-    // ) internal {
-    //     for (uint8 i = 0; i < encOptions.length; i++) {
-    //         euint32 toAdd = TFHE.cmux(
-    //             TFHE.asEuint32(TFHE.eq(option, encOptions[i])),
-    //             amount,
-    //             TFHE.asEuint32(0)
-    //         );
-    //         tally[submissionId][i] = TFHE.add(tally[submissionId][i], toAdd);
-    //     }
-    // }
-
-    // // Get tally for a submission
-    // function getTally(uint256 submissionId, bytes32 publicKey)
-    //     public
-    //     view
-    //     returns (bytes[] memory)
-    // {
-    //     bytes[] memory tallyResp = new bytes[](encOptions.length);
-    //     for (uint8 i = 0; i < encOptions.length; i++) {
-    //         tallyResp[i] = TFHE.reencrypt(tally[submissionId][i], publicKey);
-    //     }
-    //     return tallyResp;
-    // }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
     // function castVote(bytes calldata encryptedVoteCount) public {}
