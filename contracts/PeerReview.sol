@@ -201,7 +201,10 @@ contract PeerReview {
     }
 
     // Function to count how many of a reviewer's keywords appear in a submission's data
-    function countReviewerKeywordsInSubmission(uint256 submissionId, address reviewerAddress) public view returns (uint256) {
+    function countReviewerKeywordsInSubmission(
+        uint256 submissionId,
+        address reviewerAddress
+    ) public view returns (uint256) {
         require(submissionId < submissions.length, "Invalid submission ID");
         Submission storage submission = submissions[submissionId];
         string[] memory reviewerKeywords = getReviewerKeywords(reviewerAddress);
@@ -216,7 +219,9 @@ contract PeerReview {
 
     // Function to generate a pseudo-random number based on block timestamp and sender's address
     function getRandomNumber() public view returns (uint256) {
-        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender)));
+        uint256 seed = uint256(
+            keccak256(abi.encodePacked(block.timestamp, msg.sender))
+        );
         return seed;
     }
 
