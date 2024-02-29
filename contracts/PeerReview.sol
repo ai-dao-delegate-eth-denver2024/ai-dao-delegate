@@ -238,10 +238,10 @@ contract PeerReview {
         require(submissionId < submissions.length, "Invalid submission ID");
 
 
-        ReviewerCount[] memory counts = new ReviewerCount[](reviewers.length);
-        for (uint256 i = 0; i < reviewers.length; i++) {
-            counts[i].reviewer = reviewers[i].addr;
-            counts[i].count = countReviewerKeywordsInSubmission(submissionId, reviewers[i].addr);
+        ReviewerCount[] memory counts = new ReviewerCount[](submissions[submissionId].shuffledReviewers.length);
+        for (uint256 i = 0; i < submissions[submissionId].shuffledReviewers.length; i++) {
+            counts[i].reviewer = submissions[submissionId].shuffledReviewers[i];
+            counts[i].count = countReviewerKeywordsInSubmission(submissionId, submissions[submissionId].shuffledReviewers[i]);
         }
 
         // Directly track the top 3 reviewers
@@ -263,7 +263,7 @@ contract PeerReview {
             }
         }
 
-        return topReviewers;
+        submissions[submissionId].selectedReviewers = topReviewers;
     }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
