@@ -199,6 +199,12 @@ contract PeerReview {
         submissions[submissionId].seed = seed;
     }
 
+    // Function to get shuffled reviewers for a submission
+    function getShuffledReviewers(uint256 submissionId) public view returns (address[] memory) {
+        require(submissionId < submissions.length, "Invalid submission ID");
+        return submissions[submissionId].shuffledReviewers;
+    }
+
     // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
     function shuffleReviewers(uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
