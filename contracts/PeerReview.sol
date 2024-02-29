@@ -263,19 +263,7 @@ contract PeerReview {
             }
         }
 
-        // Filter out any uninitialized addresses (in case there are less than 3 reviewers)
-        uint256 validReviewersCount = 0;
-        for (uint256 i = 0; i < 3; i++) {
-            if (topReviewers[i] != address(0)) {
-                validReviewersCount++;
-            }
-        }
-        address[] memory finalTopReviewers = new address[](validReviewersCount);
-        for (uint256 i = 0; i < validReviewersCount; i++) {
-            finalTopReviewers[i] = topReviewers[i];
-        }
-
-        return topReviewers;
+        return finalTopReviewers;
     }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
