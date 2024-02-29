@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "fhevm/lib/TFHE.sol";
 
 contract PeerReview {
     struct Reviewer {
@@ -24,11 +25,23 @@ contract PeerReview {
 
     address public owner;
 
+    string public query;
+
+    string[] public options;
+    euint8[] internal encOptions;
+
+    uint32 MAX_INT = 2**32 - 1;
+    uint8 MAX_OPTIONS = 5;
+
+    mapping(address => euint8) internal votes;
+    mapping(uint8 => euint32) internal tally;
+
     //constructor that sets license and ROI_DENOMINATOR
     constructor(string memory _license, uint256 _roiDenominator) {
         LICENSE = _license; // ODC-BY-1.0
         ROI_DENOMINATOR = _roiDenominator;
         owner = msg.sender;
+        options = ["Yes", "No"];
     }
 
     // Function to add an author, only callable by the owner
@@ -224,22 +237,30 @@ contract PeerReview {
         );
         return seed;
     }
-        // Temporary structure to hold reviewer counts
-        struct ReviewerCount {
-            address reviewer;
-            uint256 count;
-        }
+
+    // Temporary structure to hold reviewer counts
+    struct ReviewerCount {
+        address reviewer;
+        uint256 count;
+    }
+
     // Function to find the top 3 reviewers based on the count of their keywords in a submission's data
-    function findTopReviewersForSubmission(uint256 submissionId)
-        public
-    {
+    function findTopReviewersForSubmission(uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
 
-
-        ReviewerCount[] memory counts = new ReviewerCount[](submissions[submissionId].shuffledReviewers.length);
-        for (uint256 i = 0; i < submissions[submissionId].shuffledReviewers.length; i++) {
+        ReviewerCount[] memory counts = new ReviewerCount[](
+            submissions[submissionId].shuffledReviewers.length
+        );
+        for (
+            uint256 i = 0;
+            i < submissions[submissionId].shuffledReviewers.length;
+            i++
+        ) {
             counts[i].reviewer = submissions[submissionId].shuffledReviewers[i];
-            counts[i].count = countReviewerKeywordsInSubmission(submissionId, submissions[submissionId].shuffledReviewers[i]);
+            counts[i].count = countReviewerKeywordsInSubmission(
+                submissionId,
+                submissions[submissionId].shuffledReviewers[i]
+            );
         }
 
         // Directly track the top 3 reviewers
@@ -263,6 +284,124 @@ contract PeerReview {
 
         submissions[submissionId].selectedReviewers = topReviewers;
     }
+
+    // Voting functionality
+
+    function init() public {
+        for (uint8 i = 0; i < options.length; i++) {
+            tally[i] = TFHE.asEuint32(0);
+            encOptions.push(TFHE.asEuint8(i));
+        }
+    }
+
+    function vote(bytes memory encOption) public {
+        euint8 option = TFHE.asEuint8(encOption);
+
+        // This is probably not needed
+        // require(encOptions.contains(option))
+        // euint8 isValid = TFHE.asEuint8(
+        //     TFHE.or(
+        //         TFHE.eq(option, encOptions[0]),
+        //         TFHE.eq(option, encOptions[1])
+        //     )
+        // );
+        // for (uint256 i = 1; i < encOptions.length; i++) {
+        //     TFHE.asEuint8(TFHE.or(isValid, TFHE.asEuint8(TFHE.eq(option, encOptions[i + 1]))));
+        // }
+        // TFHE.req(isValid);
+
+        // If already voted - first revert the old vote
+        if (TFHE.isInitialized(votes[msg.sender])) {
+            addToTally(votes[msg.sender], TFHE.asEuint32(MAX_INT)); // Adding MAX_INT is effectively `.sub(1)`
+        }
+
+        votes[msg.sender] = option;
+        addToTally(option, TFHE.asEuint32(1));
+    }
+
+    function getTally(bytes32 publicKey) public view returns (bytes[] memory) {
+        bytes[] memory tallyResp = new bytes[](encOptions.length);
+        for (uint8 i = 0; i < encOptions.length; i++) {
+            tallyResp[i] = (TFHE.reencrypt(tally[i], publicKey));
+        }
+
+        return tallyResp;
+    }
+
+    function addToTally(euint8 option, euint32 amount) internal {
+        for (uint8 i = 0; i < encOptions.length; i++) {
+            euint32 toAdd = TFHE.cmux(
+                TFHE.eq(option, encOptions[i]),
+                amount,
+                TFHE.asEuint32(0)
+            );
+            tally[i] = TFHE.add(tally[i], toAdd);
+        }
+    }
+
+    // euint8[] internal encOptions;
+
+    // // Initialize voting for a submission with predefined options
+    // function initVoting(uint256 submissionId, string[] memory optList) public {
+    //     require(optList.length <= MAX_OPTIONS, "Too many options!");
+    //     for (uint8 i = 0; i < optList.length; i++) {
+    //         tally[submissionId][i] = TFHE.asEuint32(0);
+    //         encOptions.push(TFHE.asEuint8(i));
+    //     }
+    // }
+
+    // // Cast an encrypted vote for a submission
+    // function vote(uint256 submissionId, bytes memory encOption) public {
+    //     euint8 option = TFHE.asEuint8(encOption);
+    //     euint8 isValid = TFHE.or(
+    //         TFHE.eq(option, encOptions[0]),
+    //         TFHE.eq(option, encOptions[1])
+    //     );
+    //     for (uint256 i = 1; i < encOptions.length; i++) {
+    //         TFHE.or(isValid, TFHE.eq(option, encOptions[i + 1]));
+    //     }
+    //     TFHE.req(isValid);
+
+    //     if (TFHE.isInitialized(votes[submissionId][msg.sender])) {
+    //         addToTally(
+    //             submissionId,
+    //             votes[submissionId][msg.sender],
+    //             TFHE.asEuint32(MAX_INT)
+    //         ); // Revert old vote
+    //     }
+
+    //     votes[submissionId][msg.sender] = option;
+    //     addToTally(submissionId, option, TFHE.asEuint32(1));
+    // }
+
+    // // Internal function to add to the tally
+    // function addToTally(
+    //     uint256 submissionId,
+    //     euint8 option,
+    //     euint32 amount
+    // ) internal {
+    //     for (uint8 i = 0; i < encOptions.length; i++) {
+    //         euint32 toAdd = TFHE.cmux(
+    //             TFHE.asEuint32(TFHE.eq(option, encOptions[i])),
+    //             amount,
+    //             TFHE.asEuint32(0)
+    //         );
+    //         tally[submissionId][i] = TFHE.add(tally[submissionId][i], toAdd);
+    //     }
+    // }
+
+    // // Get tally for a submission
+    // function getTally(uint256 submissionId, bytes32 publicKey)
+    //     public
+    //     view
+    //     returns (bytes[] memory)
+    // {
+    //     bytes[] memory tallyResp = new bytes[](encOptions.length);
+    //     for (uint8 i = 0; i < encOptions.length; i++) {
+    //         tallyResp[i] = TFHE.reencrypt(tally[submissionId][i], publicKey);
+    //     }
+    //     return tallyResp;
+    // }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
     // function castVote(bytes calldata encryptedVoteCount) public {}
