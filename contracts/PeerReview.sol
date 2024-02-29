@@ -194,7 +194,7 @@ contract PeerReview {
     // }
 
     // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
-    function shuffleReviewers(uint256 submissionId) internal {
+    function shuffleReviewers(uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
         Submission storage submission = submissions[submissionId];
         address[] memory shuffledReviewers = new address[](reviewers.length);
