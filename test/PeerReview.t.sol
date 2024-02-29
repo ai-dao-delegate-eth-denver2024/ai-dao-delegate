@@ -191,7 +191,9 @@ contract PeerReviewTest is Test {
         peerReview.shuffleReviewers(submissionId);
 
         // Retrieve the shuffled reviewers
-        address[] memory shuffledReviewers = peerReview.getShuffledReviewers(submissionId);
+        address[] memory shuffledReviewers = peerReview.getShuffledReviewers(
+            submissionId
+        );
 
         // Retrieve all reviewers to compare against shuffled reviewers
         address[] memory allReviewers = peerReview.getReviewers();
