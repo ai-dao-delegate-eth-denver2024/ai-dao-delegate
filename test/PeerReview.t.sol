@@ -185,7 +185,7 @@ contract PeerReviewTest is Test {
         uint256 submissionId = peerReview.submitData(testData);
 
         // Assign a seed to ensure deterministic shuffling for testing
-        peerReview.assignRndSeed(submissionId, 2342);
+        peerReview.assignRandomSeedToSubmission(submissionId);
 
         // Call shuffleReviewers with the submission ID
         peerReview.shuffleReviewers(submissionId);
