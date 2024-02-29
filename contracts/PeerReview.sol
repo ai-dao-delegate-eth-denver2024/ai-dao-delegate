@@ -184,7 +184,7 @@ contract PeerReview {
         // Simple loop to check substring
         for (
             uint256 i = 0;
-            i < stringBytes.length - substringBytes.length;
+            i <= stringBytes.length - substringBytes.length;
             i++
         ) {
             bool isMatch = true;
