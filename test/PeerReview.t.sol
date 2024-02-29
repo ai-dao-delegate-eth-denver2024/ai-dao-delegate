@@ -174,4 +174,34 @@ contract PeerReviewTest is Test {
         );
         assertEq(data2, testData2, "Mismatch in second submission data");
     }
+
+    // Test for the shuffleReviewers function
+    function testShuffleReviewers() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Create a new submission to have a context for shuffling
+        string memory testData = "Test data for shuffling reviewers";
+        uint256 submissionId = peerReview.submitData(testData);
+
+        // Assign a seed to ensure deterministic shuffling for testing
+        peerReview.assignRndSeed(submissionId, 123456);
+
+        // Call shuffleReviewers with the submission ID
+        peerReview.shuffleReviewers(submissionId);
+
+        // Retrieve the shuffled reviewers
+        address[] memory shuffledReviewers = peerReview.getShuffledReviewers(submissionId);
+
+        // Assert that the shuffled reviewers are not in the same order as the original reviewers
+        // This is a simplistic check and might need to be adjusted based on the shuffling algorithm's implementation details
+        bool isShuffled = false;
+        for (uint256 i = 0; i < shuffledReviewers.length; i++) {
+            if (shuffledReviewers[i] != peerReview.reviewers(i).addr) {
+                isShuffled = true;
+                break;
+            }
+        }
+        assertTrue(isShuffled, "Reviewers were not shuffled.");
+    }
 }
