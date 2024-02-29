@@ -233,3 +233,44 @@ contract PeerReview {
     //     submissions[0].isApproved = true;
     // }
 }
+    // Function to find the top 3 reviewers based on the count of their keywords in a submission's data
+    function findTopReviewersForSubmission(uint256 submissionId)
+        public
+        view
+        returns (address[] memory)
+    {
+        require(submissionId < submissions.length, "Invalid submission ID");
+
+        // Temporary structure to hold reviewer counts
+        struct ReviewerCount {
+            address reviewer;
+            uint256 count;
+        }
+
+        ReviewerCount[] memory counts = new ReviewerCount[](reviewers.length);
+        for (uint256 i = 0; i < reviewers.length; i++) {
+            counts[i].reviewer = reviewers[i].addr;
+            counts[i].count = countReviewerKeywordsInSubmission(submissionId, reviewers[i].addr);
+        }
+
+        // Simple insertion sort for the top 3 counts
+        for (uint256 i = 1; i < counts.length; i++) {
+            ReviewerCount memory key = counts[i];
+            uint256 j = i - 1;
+
+            while ((int(j) >= 0) && (counts[j].count < key.count)) {
+                counts[j + 1] = counts[j];
+                j--;
+            }
+            counts[j + 1] = key;
+        }
+
+        // Prepare the result array for the top 3 reviewers
+        uint256 resultSize = reviewers.length > 3 ? 3 : reviewers.length;
+        address[] memory topReviewers = new address[](resultSize);
+        for (uint256 i = 0; i < resultSize; i++) {
+            topReviewers[i] = counts[i].reviewer;
+        }
+
+        return topReviewers;
+    }
