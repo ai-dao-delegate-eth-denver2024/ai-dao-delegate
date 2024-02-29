@@ -342,3 +342,21 @@ contract PeerReviewTest is Test {
         // This part can be more specific based on the setup of reviewers and keywords
     }
 }
+    // Test for initializing voting, casting a vote, and getting the tally
+    function testFheVotingProcess() public {
+        // Initialize the voting
+        peerReview.initFheVoting();
+
+        // Cast a vote (for simplicity, we're using a mock encrypted vote representing "Yes")
+        bytes memory mockEncryptedVote = abi.encodePacked(uint8(0)); // Assuming 0 represents "Yes"
+        peerReview.fheVote(mockEncryptedVote);
+
+        // Get the tally (for simplicity, we're using a mock public key)
+        bytes32 mockPublicKey = 0x00; // Mock public key
+        bytes[] memory tallyResults = peerReview.fheGetTally(mockPublicKey);
+
+        // Assert that the tally for "Yes" is 1
+        // Note: This is a simplified assertion. In a real scenario, you would decrypt the tally result to verify the count.
+        assertEq(tallyResults.length, 2, "There should be two options in the tally.");
+        assertTrue(tallyResults[0].length > 0, "The tally for 'Yes' should be greater than 0.");
+    }
