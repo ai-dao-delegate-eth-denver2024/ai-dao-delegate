@@ -262,7 +262,8 @@ contract PeerReviewTest is Test {
         peerReview.addReviewer(reviewerAddress, keywords); // Assuming addReviewer function can be reused or modified for this purpose
 
         // Setup a submission with specific content
-        string memory testData = "This submission discusses scalability and security in depth.";
+        string
+            memory testData = "This submission discusses scalability and security in depth.";
         uint256 submissionId = peerReview.submitData(testData);
 
         // Call countReviewerKeywordsInSubmission with the submission ID and reviewer's address
@@ -279,53 +280,65 @@ contract PeerReviewTest is Test {
         );
     }
 
-        // Test for the findTopReviewersForSubmission function
-        function testFindTopReviewersForSubmission() public {
-            // Setup initial reviewers, keywords, and a submission
-            setupReviewersAndKeywords();
-            string memory testData = "This submission discusses scalability, security, and innovation.";
-            uint256 submissionId = peerReview.submitData(testData);
-            peerReview.assignRandomSeedToSubmission(submissionId);
-            peerReview.shuffleReviewers(submissionId);
-            peerReview.findTopReviewersForSubmission(submissionId);
+    // Test for the findTopReviewersForSubmission function
+    function testFindTopReviewersForSubmission() public {
+        // Setup initial reviewers, keywords, and a submission
+        setupReviewersAndKeywords();
+        string
+            memory testData = "This submission discusses scalability, security, and innovation.";
+        uint256 submissionId = peerReview.submitData(testData);
+        peerReview.assignRandomSeedToSubmission(submissionId);
+        peerReview.shuffleReviewers(submissionId);
+        peerReview.findTopReviewersForSubmission(submissionId);
 
-            // Retrieve the top reviewers for the submission
-            address[] memory topReviewers = peerReview.getSelectedReviewers(submissionId);
+        // Retrieve the top reviewers for the submission
+        address[] memory topReviewers = peerReview.getSelectedReviewers(
+            submissionId
+        );
 
-            // Assert that there are exactly 3 top reviewers
-            assertEq(topReviewers.length, 3, "There should be exactly 3 top reviewers.");
+        // Assert that there are exactly 3 top reviewers
+        assertEq(
+            topReviewers.length,
+            3,
+            "There should be exactly 3 top reviewers."
+        );
 
-            // Optionally, assert that the top reviewers are the expected ones based on the submission's content
-            // This part can be more specific based on the setup of reviewers and keywords
-        }
+        // Optionally, assert that the top reviewers are the expected ones based on the submission's content
+        // This part can be more specific based on the setup of reviewers and keywords
+    }
 
-        // Test for findTopReviewersForSubmission with DAO and web3 keywords
-        function testFindTopReviewersForSubmissionWithDAOAndWeb3() public {
-            // Setup reviewers with DAO and web3 related keywords
-            setupReviewersAndKeywords(); // Resetting reviewers
-            peerReview.addKeywordToReviewer(0, "DAO");
-            peerReview.addKeywordToReviewer(1, "web3");
-            peerReview.addKeywordToReviewer(2, "DAO");
-            peerReview.addKeywordToReviewer(2, "web3");
-            peerReview.addKeywordToReviewer(3, "DAO");
+    // Test for findTopReviewersForSubmission with DAO and web3 keywords
+    function testFindTopReviewersForSubmissionWithDAOAndWeb3() public {
+        // Setup reviewers with DAO and web3 related keywords
+        setupReviewersAndKeywords(); // Resetting reviewers
+        peerReview.addKeywordToReviewer(1, "web3");
+        peerReview.addKeywordToReviewer(2, "DAO");
+        peerReview.addKeywordToReviewer(2, "web3");
+        peerReview.addKeywordToReviewer(3, "DAO");
 
-            // Submit data related to DAOs and web3
-            string memory testData = "Exploring the impact of DAOs and web3 on decentralized governance.";
-            uint256 submissionId = peerReview.submitData(testData);
+        // Submit data related to DAOs and web3
+        string
+            memory testData = "Exploring the impact of DAOs and web3 on decentralized governance.";
+        uint256 submissionId = peerReview.submitData(testData);
 
-            // Get a random seed, shuffle the reviewers, and find the top reviewers for the submission
-            peerReview.assignRandomSeedToSubmission(submissionId);
-            peerReview.shuffleReviewers(submissionId);
-            peerReview.findTopReviewersForSubmission(submissionId);
+        // Get a random seed, shuffle the reviewers, and find the top reviewers for the submission
+        peerReview.assignRandomSeedToSubmission(submissionId);
+        peerReview.shuffleReviewers(submissionId);
+        peerReview.findTopReviewersForSubmission(submissionId);
 
-            // Retrieve the top reviewers for the submission
-            address[] memory topReviewers = peerReview.getSelectedReviewers(submissionId);
+        // Retrieve the top reviewers for the submission
+        address[] memory topReviewers = peerReview.getSelectedReviewers(
+            submissionId
+        );
 
-            // Assert that there are exactly 3 top reviewers
-            assertEq(topReviewers.length, 3, "There should be exactly 3 top reviewers.");
+        // Assert that there are exactly 3 top reviewers
+        assertEq(
+            topReviewers.length,
+            3,
+            "There should be exactly 3 top reviewers."
+        );
 
-            // Optionally, assert that the top reviewers are the expected ones based on the submission's content
-            // This part can be more specific based on the setup of reviewers and keywords
-        }
+        // Optionally, assert that the top reviewers are the expected ones based on the submission's content
+        // This part can be more specific based on the setup of reviewers and keywords
+    }
 }
-
