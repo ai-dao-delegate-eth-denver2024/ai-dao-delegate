@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract PeerReview {
+import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
+
+contract PeerReview is VRFConsumerBase {
     struct Reviewer {
         address addr;
         string[] keywords;
@@ -23,6 +25,20 @@ contract PeerReview {
     uint256 public ROI_DENOMINATOR;
 
     address public owner;
+    bytes32 internal keyHash;
+    uint256 internal fee;
+    uint256 public randomResult;
+
+    // VRFConsumerBase constructor requires the VRF Coordinator address and the LINK token address
+    constructor(string memory _license, uint256 _roiDenominator, address _vrfCoordinator, address _linkToken, bytes32 _keyHash) 
+    VRFConsumerBase(_vrfCoordinator, _linkToken)
+    {
+        LICENSE = _license; // ODC-BY-1.0
+        ROI_DENOMINATOR = _roiDenominator;
+        owner = msg.sender;
+        keyHash = _keyHash;
+        fee = 0.1 * 10 ** 18; // 0.1 LINK (Varies by network)
+    }
 
     //constructor that sets license and ROI_DENOMINATOR
     constructor(string memory _license, uint256 _roiDenominator) {
@@ -199,10 +215,15 @@ contract PeerReview {
         return false;
     }
 
-    // Function to generate a pseudo-random number based on block timestamp and sender's address
-    function getRandomNumber() public view returns (uint256) {
-        uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender)));
-        return seed;
+    // Request randomness
+    function getRandomNumber() public returns (bytes32 requestId) {
+        require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
+        return requestRandomness(keyHash, fee);
+    }
+
+    // Callback function used by VRF Coordinator
+    function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+        randomResult = randomness;
     }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
