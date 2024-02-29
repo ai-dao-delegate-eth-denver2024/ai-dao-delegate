@@ -294,18 +294,18 @@ contract PeerReview {
         }
     }
 
-    function FheVote(bytes memory encOption) public {
+    function fheVote(bytes memory encOption) public {
         euint8 option = TFHE.asEuint8(encOption);
 
         if (TFHE.isInitialized(votes[msg.sender])) {
-            FheAddToTally(votes[msg.sender], TFHE.asEuint32(MAX_INT)); // Adding MAX_INT is effectively `.sub(1)`
+            fheAddToTally(votes[msg.sender], TFHE.asEuint32(MAX_INT)); // Adding MAX_INT is effectively `.sub(1)`
         }
 
         votes[msg.sender] = option;
-        FheAddToTally(option, TFHE.asEuint32(1));
+        fheAddToTally(option, TFHE.asEuint32(1));
     }
 
-    function FheGetTally(bytes32 publicKey)
+    function fheGetTally(bytes32 publicKey)
         public
         view
         returns (bytes[] memory)
@@ -318,7 +318,7 @@ contract PeerReview {
         return tallyResp;
     }
 
-    function FheAddToTally(euint8 option, euint32 amount) internal {
+    function fheAddToTally(euint8 option, euint32 amount) internal {
         for (uint8 i = 0; i < encOptions.length; i++) {
             euint32 toAdd = TFHE.cmux(
                 TFHE.eq(option, encOptions[i]),
