@@ -342,8 +342,8 @@ contract PeerReviewTest is Test {
         // This part can be more specific based on the setup of reviewers and keywords
     }
 
-    // Test for initializing voting, casting a vote, and getting the tally
-    function testFheVotingProcess() public {
+    // Test for initializing voting, casting a vote, and getting the plaintext tally
+    function testFheGetTallyPt() public {
         // Initialize the voting
         peerReview.initFheVoting();
 
@@ -351,20 +351,13 @@ contract PeerReviewTest is Test {
         bytes memory mockEncryptedVote = abi.encodePacked(uint8(0)); // Assuming 0 represents "Yes"
         peerReview.fheVote(mockEncryptedVote);
 
-        // Get the tally (for simplicity, we're using a mock public key)
+        // Get the plaintext tally (for simplicity, we're using a mock public key)
         bytes32 mockPublicKey = 0x00; // Mock public key
-        bytes[] memory tallyResults = peerReview.fheGetTally(mockPublicKey);
+        (uint32 yesVotes, uint32 noVotes) = peerReview.fheGetTallyPt(mockPublicKey);
 
-        // Assert that the tally for "Yes" is 1
+        // Assert that the tally for "Yes" is 1 and "No" is 0
         // Note: This is a simplified assertion. In a real scenario, you would decrypt the tally result to verify the count.
-        assertEq(
-            tallyResults.length,
-            2,
-            "There should be two options in the tally."
-        );
-        assertTrue(
-            tallyResults[0].length > 0,
-            "The tally for 'Yes' should be greater than 0."
-        );
+        assertEq(yesVotes, 1, "The tally for 'Yes' should be 1.");
+        assertEq(noVotes, 0, "The tally for 'No' should be 0.");
     }
 }
