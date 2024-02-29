@@ -193,24 +193,24 @@ contract PeerReview {
     //     submission.selectedReviewers = topReviewers;
     // }
 
-    // // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
-    // function shuffleReviewers(uint256 submissionId) internal {
-    //     require(submissionId < submissions.length, "Invalid submission ID");
-    //     Submission storage submission = submissions[submissionId];
-    //     address[] memory shuffledReviewers = new address[](reviewers.length);
-    //     for (uint256 i = 0; i < reviewers.length; i++) {
-    //         shuffledReviewers[i] = reviewers[i].addr;
-    //     }
-    //     uint256 seed = submission.seed;
-    //     for (uint256 i = 0; i < shuffledReviewers.length; i++) {
-    //         uint256 j = (uint256(keccak256(abi.encode(seed, i))) % (i + 1));
-    //         (shuffledReviewers[i], shuffledReviewers[j]) = (
-    //             shuffledReviewers[j],
-    //             shuffledReviewers[i]
-    //         );
-    //     }
-    //     submission.shuffledReviewers = shuffledReviewers;
-    // }
+    // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
+    function shuffleReviewers(uint256 submissionId) internal {
+        require(submissionId < submissions.length, "Invalid submission ID");
+        Submission storage submission = submissions[submissionId];
+        address[] memory shuffledReviewers = new address[](reviewers.length);
+        for (uint256 i = 0; i < reviewers.length; i++) {
+            shuffledReviewers[i] = reviewers[i].addr;
+        }
+        uint256 seed = submission.seed;
+        for (uint256 i = 0; i < shuffledReviewers.length; i++) {
+            uint256 j = (uint256(keccak256(abi.encode(seed, i))) % (i + 1));
+            (shuffledReviewers[i], shuffledReviewers[j]) = (
+                shuffledReviewers[j],
+                shuffledReviewers[i]
+            );
+        }
+        submission.shuffledReviewers = shuffledReviewers;
+    }
 
     // // A simple function to check if a string contains a substring
     // function contains(string memory _string, string memory _substring)
