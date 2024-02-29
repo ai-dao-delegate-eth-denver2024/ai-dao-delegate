@@ -224,15 +224,11 @@ contract PeerReview {
         );
         return seed;
     }
-
-    // // https://docs.inco.org/getting-started/example-dapps/private-voting
-    // function castVote(bytes calldata encryptedVoteCount) public {}
-
-    // function revealResult() public {
-    //     //approve the submission
-    //     submissions[0].isApproved = true;
-    // }
-}
+        // Temporary structure to hold reviewer counts
+        struct ReviewerCount {
+            address reviewer;
+            uint256 count;
+        }
     // Function to find the top 3 reviewers based on the count of their keywords in a submission's data
     function findTopReviewersForSubmission(uint256 submissionId)
         public
@@ -241,11 +237,6 @@ contract PeerReview {
     {
         require(submissionId < submissions.length, "Invalid submission ID");
 
-        // Temporary structure to hold reviewer counts
-        struct ReviewerCount {
-            address reviewer;
-            uint256 count;
-        }
 
         ReviewerCount[] memory counts = new ReviewerCount[](reviewers.length);
         for (uint256 i = 0; i < reviewers.length; i++) {
@@ -274,3 +265,12 @@ contract PeerReview {
 
         return topReviewers;
     }
+
+    // // https://docs.inco.org/getting-started/example-dapps/private-voting
+    // function castVote(bytes calldata encryptedVoteCount) public {}
+
+    // function revealResult() public {
+    //     //approve the submission
+    //     submissions[0].isApproved = true;
+    // }
+}
