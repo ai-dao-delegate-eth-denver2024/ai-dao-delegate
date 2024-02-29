@@ -287,39 +287,29 @@ contract PeerReview {
 
     // Voting functionality
 
-    function init() public {
+    function initFheVoting() public {
         for (uint8 i = 0; i < options.length; i++) {
             tally[i] = TFHE.asEuint32(0);
             encOptions.push(TFHE.asEuint8(i));
         }
     }
 
-    function vote(bytes memory encOption) public {
+    function FheVote(bytes memory encOption) public {
         euint8 option = TFHE.asEuint8(encOption);
 
-        // This is probably not needed
-        // require(encOptions.contains(option))
-        // euint8 isValid = TFHE.asEuint8(
-        //     TFHE.or(
-        //         TFHE.eq(option, encOptions[0]),
-        //         TFHE.eq(option, encOptions[1])
-        //     )
-        // );
-        // for (uint256 i = 1; i < encOptions.length; i++) {
-        //     TFHE.asEuint8(TFHE.or(isValid, TFHE.asEuint8(TFHE.eq(option, encOptions[i + 1]))));
-        // }
-        // TFHE.req(isValid);
-
-        // If already voted - first revert the old vote
         if (TFHE.isInitialized(votes[msg.sender])) {
-            addToTally(votes[msg.sender], TFHE.asEuint32(MAX_INT)); // Adding MAX_INT is effectively `.sub(1)`
+            FheAddToTally(votes[msg.sender], TFHE.asEuint32(MAX_INT)); // Adding MAX_INT is effectively `.sub(1)`
         }
 
         votes[msg.sender] = option;
-        addToTally(option, TFHE.asEuint32(1));
+        FheAddToTally(option, TFHE.asEuint32(1));
     }
 
-    function getTally(bytes32 publicKey) public view returns (bytes[] memory) {
+    function FheGetTally(bytes32 publicKey)
+        public
+        view
+        returns (bytes[] memory)
+    {
         bytes[] memory tallyResp = new bytes[](encOptions.length);
         for (uint8 i = 0; i < encOptions.length; i++) {
             tallyResp[i] = (TFHE.reencrypt(tally[i], publicKey));
@@ -328,7 +318,7 @@ contract PeerReview {
         return tallyResp;
     }
 
-    function addToTally(euint8 option, euint32 amount) internal {
+    function FheAddToTally(euint8 option, euint32 amount) internal {
         for (uint8 i = 0; i < encOptions.length; i++) {
             euint32 toAdd = TFHE.cmux(
                 TFHE.eq(option, encOptions[i]),
