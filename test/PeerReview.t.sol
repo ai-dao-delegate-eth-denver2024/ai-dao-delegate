@@ -185,7 +185,7 @@ contract PeerReviewTest is Test {
         uint256 submissionId = peerReview.submitData(testData);
 
         // Assign a seed to ensure deterministic shuffling for testing
-        peerReview.assignRndSeed(submissionId, 123456);
+        peerReview.assignRndSeed(submissionId, 2342);
 
         // Call shuffleReviewers with the submission ID
         peerReview.shuffleReviewers(submissionId);
@@ -198,14 +198,14 @@ contract PeerReviewTest is Test {
         // Retrieve all reviewers to compare against shuffled reviewers
         address[] memory allReviewers = peerReview.getReviewers();
         // Log the shuffledReviewers and allReviewers arrays for comparison
-        console.log("Shuffled Reviewers:");
-        for (uint256 i = 0; i < shuffledReviewers.length; i++) {
-            console.log(shuffledReviewers[i]);
-        }
-        console.log("All Reviewers:");
-        for (uint256 i = 0; i < allReviewers.length; i++) {
-            console.log(allReviewers[i]);
-        }
+        // console.log("Shuffled Reviewers:");
+        // for (uint256 i = 0; i < shuffledReviewers.length; i++) {
+        //     console.log(shuffledReviewers[i]);
+        // }
+        // console.log("All Reviewers:");
+        // for (uint256 i = 0; i < allReviewers.length; i++) {
+        //     console.log(allReviewers[i]);
+        // }
 
         // Assert that the shuffled reviewers are not in the same order as the original reviewers
         // This is a simplistic check and might need to be adjusted based on the shuffling algorithm's implementation details
