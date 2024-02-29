@@ -229,4 +229,10 @@ contract PeerReviewTest is Test {
             bool result2 = peerReview.contains("Solidity is awesome", "bad");
             assertFalse(result2, "The string should not contain 'bad'");
         }
+
+        // Test for the getRandomNumber function
+        function testGetRandomNumber() public {
+            uint256 randomNumber = peerReview.getRandomNumber();
+            assertTrue(randomNumber != 0, "Random number should not be zero");
+        }
 }
