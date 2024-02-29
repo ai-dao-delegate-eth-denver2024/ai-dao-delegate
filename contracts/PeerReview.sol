@@ -137,62 +137,6 @@ contract PeerReview {
         );
     }
 
-    // // Function to assign a seed to a submission
-    // function assignRndSeed(uint256 submissionId) public {
-    //     require(submissionId < submissions.length, "Invalid submission ID");
-    //     submissions[submissionId].seed = 0;
-    // }
-
-    // // Find top 3 matching reviewers for a submission
-    // function findReviewers(uint256 submissionId) public {
-    //     // The shuffleReviewers call is updated to shuffle and store reviewers in the Submission struct
-    //     shuffleReviewers(submissionId); // This call now populates the shuffledReviewers field in the Submission struct
-    //     require(submissionId < submissions.length, "Invalid submission ID");
-    //     Submission storage submission = submissions[submissionId];
-
-    //     address[] memory topReviewers = new address[](3);
-    //     uint256[] memory topReviewersValue = new uint256[](3);
-
-    //     uint256[] memory scores = new uint256[](
-    //         submission.shuffledReviewers.length
-    //     );
-    //     for (uint256 i = 0; i < submission.shuffledReviewers.length; i++) {
-    //         address reviewerAddr = submission.shuffledReviewers[i];
-    //         // Find the reviewer in the global reviewers array to access their keywords
-    //         for (uint256 k = 0; k < reviewers.length; k++) {
-    //             if (reviewers[k].addr == reviewerAddr) {
-    //                 for (uint256 j = 0; j < reviewers[k].keywords.length; j++) {
-    //                     if (
-    //                         contains(submission.data, reviewers[k].keywords[j])
-    //                     ) {
-    //                         scores[i]++;
-    //                     }
-    //                 }
-    //                 break; // Break the loop once the matching reviewer is found
-    //             }
-    //         }
-
-    //         if (scores[i] >= topReviewersValue[0]) {
-    //             topReviewersValue[2] = topReviewersValue[1];
-    //             topReviewersValue[1] = topReviewersValue[0];
-    //             topReviewersValue[0] = scores[i];
-    //             topReviewers[2] = topReviewers[1];
-    //             topReviewers[1] = topReviewers[0];
-    //             topReviewers[0] = reviewerAddr;
-    //         } else if (scores[i] > topReviewersValue[1]) {
-    //             topReviewersValue[2] = topReviewersValue[1];
-    //             topReviewersValue[1] = scores[i];
-    //             topReviewers[2] = topReviewers[1];
-    //             topReviewers[1] = reviewerAddr;
-    //         } else if (scores[i] > topReviewersValue[2]) {
-    //             topReviewersValue[2] = scores[i];
-    //             topReviewers[2] = reviewerAddr;
-    //         }
-    //     }
-
-    //     submission.selectedReviewers = topReviewers;
-    // }
-
     // Function to assign a random seed to a submission
     function assignRndSeed(uint256 submissionId, uint256 seed) public {
         require(submissionId < submissions.length, "Invalid submission ID");
@@ -200,7 +144,11 @@ contract PeerReview {
     }
 
     // Function to get shuffled reviewers for a submission
-    function getShuffledReviewers(uint256 submissionId) public view returns (address[] memory) {
+    function getShuffledReviewers(uint256 submissionId)
+        public
+        view
+        returns (address[] memory)
+    {
         require(submissionId < submissions.length, "Invalid submission ID");
         return submissions[submissionId].shuffledReviewers;
     }
@@ -224,32 +172,32 @@ contract PeerReview {
         submission.shuffledReviewers = shuffledReviewers;
     }
 
-    // // A simple function to check if a string contains a substring
-    // function contains(string memory _string, string memory _substring)
-    //     public
-    //     pure
-    //     returns (bool)
-    // {
-    //     bytes memory stringBytes = bytes(_string);
-    //     bytes memory substringBytes = bytes(_substring);
+    // A simple function to check if a string contains a substring
+    function contains(string memory _string, string memory _substring)
+        public
+        pure
+        returns (bool)
+    {
+        bytes memory stringBytes = bytes(_string);
+        bytes memory substringBytes = bytes(_substring);
 
-    //     // Simple loop to check substring
-    //     for (
-    //         uint256 i = 0;
-    //         i < stringBytes.length - substringBytes.length;
-    //         i++
-    //     ) {
-    //         bool isMatch = true;
-    //         for (uint256 j = 0; j < substringBytes.length; j++) {
-    //             if (stringBytes[i + j] != substringBytes[j]) {
-    //                 isMatch = false;
-    //                 break;
-    //             }
-    //         }
-    //         if (isMatch) return true;
-    //     }
-    //     return false;
-    // }
+        // Simple loop to check substring
+        for (
+            uint256 i = 0;
+            i < stringBytes.length - substringBytes.length;
+            i++
+        ) {
+            bool isMatch = true;
+            for (uint256 j = 0; j < substringBytes.length; j++) {
+                if (stringBytes[i + j] != substringBytes[j]) {
+                    isMatch = false;
+                    break;
+                }
+            }
+            if (isMatch) return true;
+        }
+        return false;
+    }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
     // function castVote(bytes calldata encryptedVoteCount) public {}
