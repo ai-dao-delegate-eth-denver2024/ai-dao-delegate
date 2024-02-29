@@ -232,8 +232,6 @@ contract PeerReview {
     // Function to find the top 3 reviewers based on the count of their keywords in a submission's data
     function findTopReviewersForSubmission(uint256 submissionId)
         public
-        view
-        returns (address[] memory)
     {
         require(submissionId < submissions.length, "Invalid submission ID");
 
