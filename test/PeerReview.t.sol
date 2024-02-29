@@ -278,5 +278,25 @@ contract PeerReviewTest is Test {
             "The keyword count does not match the expected value."
         );
     }
+
+        // Test for the findTopReviewersForSubmission function
+        function testFindTopReviewersForSubmission() public {
+            // Setup initial reviewers, keywords, and a submission
+            setupReviewersAndKeywords();
+            string memory testData = "This submission discusses scalability, security, and innovation.";
+            uint256 submissionId = peerReview.submitData(testData);
+            peerReview.assignRandomSeedToSubmission(submissionId);
+            peerReview.shuffleReviewers(submissionId);
+            peerReview.findTopReviewersForSubmission(submissionId);
+
+            // Retrieve the top reviewers for the submission
+            address[] memory topReviewers = peerReview.getSelectedReviewers(submissionId);
+
+            // Assert that there are exactly 3 top reviewers
+            assertEq(topReviewers.length, 3, "There should be exactly 3 top reviewers.");
+
+            // Optionally, assert that the top reviewers are the expected ones based on the submission's content
+            // This part can be more specific based on the setup of reviewers and keywords
+        }
 }
 
