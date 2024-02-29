@@ -244,23 +244,35 @@ contract PeerReview {
             counts[i].count = countReviewerKeywordsInSubmission(submissionId, reviewers[i].addr);
         }
 
-        // Simple insertion sort for the top 3 counts
-        for (uint256 i = 1; i < counts.length; i++) {
-            ReviewerCount memory key = counts[i];
-            uint256 j = i - 1;
+        // Directly track the top 3 reviewers
+        address[] memory topReviewers = new address[](3);
+        uint256[] memory topCounts = new uint256[](3);
 
-            while ((int(j) >= 0) && (counts[j].count < key.count)) {
-                counts[j + 1] = counts[j];
-                j--;
+        for (uint256 i = 0; i < reviewers.length; i++) {
+            uint256 currentCount = counts[i].count;
+            for (uint256 j = 0; j < 3; j++) {
+                if (currentCount > topCounts[j]) {
+                    for (uint256 k = 2; k > j; k--) {
+                        topReviewers[k] = topReviewers[k - 1];
+                        topCounts[k] = topCounts[k - 1];
+                    }
+                    topReviewers[j] = counts[i].reviewer;
+                    topCounts[j] = currentCount;
+                    break;
+                }
             }
-            counts[j + 1] = key;
         }
 
-        // Prepare the result array for the top 3 reviewers
-        uint256 resultSize = reviewers.length > 3 ? 3 : reviewers.length;
-        address[] memory topReviewers = new address[](resultSize);
-        for (uint256 i = 0; i < resultSize; i++) {
-            topReviewers[i] = counts[i].reviewer;
+        // Filter out any uninitialized addresses (in case there are less than 3 reviewers)
+        uint256 validReviewersCount = 0;
+        for (uint256 i = 0; i < 3; i++) {
+            if (topReviewers[i] != address(0)) {
+                validReviewersCount++;
+            }
+        }
+        address[] memory finalTopReviewers = new address[](validReviewersCount);
+        for (uint256 i = 0; i < validReviewersCount; i++) {
+            finalTopReviewers[i] = topReviewers[i];
         }
 
         return topReviewers;
