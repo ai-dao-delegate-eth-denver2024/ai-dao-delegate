@@ -193,11 +193,13 @@ contract PeerReviewTest is Test {
         // Retrieve the shuffled reviewers
         address[] memory shuffledReviewers = peerReview.getShuffledReviewers(submissionId);
 
+        // Retrieve all reviewers to compare against shuffled reviewers
+        address[] memory allReviewers = peerReview.getReviewers();
         // Assert that the shuffled reviewers are not in the same order as the original reviewers
         // This is a simplistic check and might need to be adjusted based on the shuffling algorithm's implementation details
         bool isShuffled = false;
         for (uint256 i = 0; i < shuffledReviewers.length; i++) {
-            if (shuffledReviewers[i] != peerReview.reviewers(i).addr) {
+            if (shuffledReviewers[i] != allReviewers[i]) {
                 isShuffled = true;
                 break;
             }
