@@ -193,6 +193,12 @@ contract PeerReview {
     //     submission.selectedReviewers = topReviewers;
     // }
 
+    // Function to assign a random seed to a submission
+    function assignRndSeed(uint256 submissionId, uint256 seed) public {
+        require(submissionId < submissions.length, "Invalid submission ID");
+        submissions[submissionId].seed = seed;
+    }
+
     // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
     function shuffleReviewers(uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
