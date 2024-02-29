@@ -235,4 +235,20 @@ contract PeerReviewTest is Test {
             uint256 randomNumber = peerReview.getRandomNumber();
             assertTrue(randomNumber != 0, "Random number should not be zero");
         }
+
+        // Test for the assignRandomSeedToSubmission function
+        function testAssignRandomSeedToSubmission() public {
+            // Submit a new data object to get a submission ID
+            string memory testData = "Test data for random seed assignment";
+            uint256 submissionId = peerReview.submitData(testData);
+
+            // Assign a random seed to the submission
+            peerReview.assignRandomSeedToSubmission(submissionId);
+
+            // Retrieve the submission to check the assigned seed
+            (,,,,,uint256 seed) = peerReview.getSubmission(submissionId);
+
+            // Assert that the seed is not zero
+            assertTrue(seed != 0, "Random seed should not be zero");
+        }
 }
