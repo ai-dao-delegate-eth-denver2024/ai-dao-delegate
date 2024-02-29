@@ -254,12 +254,16 @@ contract PeerReviewTest is Test {
 
     // Test for the countReviewerKeywordsInSubmission function
     function testCountReviewerKeywordsInSubmission() public {
-        // Setup a submission and a reviewer with specific keywords
-        string
-            memory testData = "This submission discusses scalability and security in depth.";
-        uint256 submissionId = peerReview.submitData(testData);
+        // Explicitly add keywords to the reviewer before counting
         address reviewerAddress = 0x90F79bf6EB2c4f870365E785982E1f101E93b906; // Anvil's local test account 3
-        setupReviewersAndKeywords(); // This function should already exist and set up reviewers with keywords
+        string[] memory keywords = new string[](2);
+        keywords[0] = "scalability";
+        keywords[1] = "security";
+        peerReview.addReviewer(reviewerAddress, keywords); // Assuming addReviewer function can be reused or modified for this purpose
+
+        // Setup a submission with specific content
+        string memory testData = "This submission discusses scalability and security in depth.";
+        uint256 submissionId = peerReview.submitData(testData);
 
         // Call countReviewerKeywordsInSubmission with the submission ID and reviewer's address
         uint256 keywordCount = peerReview.countReviewerKeywordsInSubmission(
