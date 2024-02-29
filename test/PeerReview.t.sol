@@ -298,5 +298,34 @@ contract PeerReviewTest is Test {
             // Optionally, assert that the top reviewers are the expected ones based on the submission's content
             // This part can be more specific based on the setup of reviewers and keywords
         }
+
+        // Test for findTopReviewersForSubmission with DAO and web3 keywords
+        function testFindTopReviewersForSubmissionWithDAOAndWeb3() public {
+            // Setup reviewers with DAO and web3 related keywords
+            setupReviewersAndKeywords(); // Resetting reviewers
+            peerReview.addKeywordToReviewer(0, "DAO");
+            peerReview.addKeywordToReviewer(1, "web3");
+            peerReview.addKeywordToReviewer(2, "DAO");
+            peerReview.addKeywordToReviewer(2, "web3");
+            peerReview.addKeywordToReviewer(3, "DAO");
+
+            // Submit data related to DAOs and web3
+            string memory testData = "Exploring the impact of DAOs and web3 on decentralized governance.";
+            uint256 submissionId = peerReview.submitData(testData);
+
+            // Get a random seed, shuffle the reviewers, and find the top reviewers for the submission
+            peerReview.assignRandomSeedToSubmission(submissionId);
+            peerReview.shuffleReviewers(submissionId);
+            peerReview.findTopReviewersForSubmission(submissionId);
+
+            // Retrieve the top reviewers for the submission
+            address[] memory topReviewers = peerReview.getSelectedReviewers(submissionId);
+
+            // Assert that there are exactly 3 top reviewers
+            assertEq(topReviewers.length, 3, "There should be exactly 3 top reviewers.");
+
+            // Optionally, assert that the top reviewers are the expected ones based on the submission's content
+            // This part can be more specific based on the setup of reviewers and keywords
+        }
 }
 
