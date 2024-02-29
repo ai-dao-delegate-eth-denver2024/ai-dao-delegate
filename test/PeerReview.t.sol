@@ -219,51 +219,60 @@ contract PeerReviewTest is Test {
         assertTrue(isShuffled, "Reviewers were not shuffled.");
     }
 
-        // Test for the contains function
-        function testStringContainsFunction() public {
-            // Test case where the substring is present
-            bool result1 = peerReview.contains("Solidity is awesome", "awesome");
-            assertTrue(result1, "The string should contain 'awesome'");
+    // Test for the contains function
+    function testStringContainsFunction() public {
+        // Test case where the substring is present
+        bool result1 = peerReview.contains("Solidity is awesome", "awesome");
+        assertTrue(result1, "The string should contain 'awesome'");
 
-            // Test case where the substring is not present
-            bool result2 = peerReview.contains("Solidity is awesome", "bad");
-            assertFalse(result2, "The string should not contain 'bad'");
-        }
+        // Test case where the substring is not present
+        bool result2 = peerReview.contains("Solidity is awesome", "bad");
+        assertFalse(result2, "The string should not contain 'bad'");
+    }
 
-        // Test for the getRandomNumber function
-        function testGetRandomNumber() public {
-            uint256 randomNumber = peerReview.getRandomNumber();
-            assertTrue(randomNumber != 0, "Random number should not be zero");
-        }
+    // Test for the getRandomNumber function
+    function testGetRandomNumber() public {
+        uint256 randomNumber = peerReview.getRandomNumber();
+        assertTrue(randomNumber != 0, "Random number should not be zero");
+    }
 
-        // Test for the assignRandomSeedToSubmission function
-        function testAssignRandomSeedToSubmission() public {
-            // Submit a new data object to get a submission ID
-            string memory testData = "Test data for random seed assignment";
-            uint256 submissionId = peerReview.submitData(testData);
+    // Test for the assignRandomSeedToSubmission function
+    function testAssignRandomSeedToSubmission() public {
+        // Submit a new data object to get a submission ID
+        string memory testData = "Test data for random seed assignment";
+        uint256 submissionId = peerReview.submitData(testData);
 
-            // Assign a random seed to the submission
-            peerReview.assignRandomSeedToSubmission(submissionId);
+        // Assign a random seed to the submission
+        peerReview.assignRandomSeedToSubmission(submissionId);
 
-            // Retrieve the submission to check the assigned seed
-            (,,,,,uint256 seed) = peerReview.getSubmission(submissionId);
+        // Retrieve the submission to check the assigned seed
+        (, , , , , uint256 seed) = peerReview.getSubmission(submissionId);
 
-            // Assert that the seed is not zero
-            assertTrue(seed != 0, "Random seed should not be zero");
-        }
+        // Assert that the seed is not zero
+        assertTrue(seed != 0, "Random seed should not be zero");
+    }
 
-        // Test for the countReviewerKeywordsInSubmission function
-        function testCountReviewerKeywordsInSubmission() public {
-            // Setup a submission and a reviewer with specific keywords
-            string memory testData = "This submission discusses scalability and security in depth.";
-            uint256 submissionId = peerReview.submitData(testData);
-            address reviewerAddress = 0x90F79bf6EB2c4f870365E785982E1f101E93b906; // Anvil's local test account 3
-            setupReviewersAndKeywords(); // This function should already exist and set up reviewers with keywords
+    // Test for the countReviewerKeywordsInSubmission function
+    function testCountReviewerKeywordsInSubmission() public {
+        // Setup a submission and a reviewer with specific keywords
+        string
+            memory testData = "This submission discusses scalability and security in depth.";
+        uint256 submissionId = peerReview.submitData(testData);
+        address reviewerAddress = 0x90F79bf6EB2c4f870365E785982E1f101E93b906; // Anvil's local test account 3
+        setupReviewersAndKeywords(); // This function should already exist and set up reviewers with keywords
 
-            // Call countReviewerKeywordsInSubmission with the submission ID and reviewer's address
-            uint256 keywordCount = peerReview.countReviewerKeywordsInSubmission(submissionId, reviewerAddress);
+        // Call countReviewerKeywordsInSubmission with the submission ID and reviewer's address
+        uint256 keywordCount = peerReview.countReviewerKeywordsInSubmission(
+            submissionId,
+            reviewerAddress
+        );
 
-            // Assert that the returned count matches our expectations (2 in this case)
-            assertEq(keywordCount, 2, "The keyword count does not match the expected value.");
-        }
+        // Assert that the returned count matches our expectations (2 in this case)
+        assertEq(
+            keywordCount,
+            2,
+            "The keyword count does not match the expected value."
+        );
+    }
 }
+
