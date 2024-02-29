@@ -197,6 +197,16 @@ contract PeerReviewTest is Test {
 
         // Retrieve all reviewers to compare against shuffled reviewers
         address[] memory allReviewers = peerReview.getReviewers();
+        // Log the shuffledReviewers and allReviewers arrays for comparison
+        console.log("Shuffled Reviewers:");
+        for (uint256 i = 0; i < shuffledReviewers.length; i++) {
+            console.log(shuffledReviewers[i]);
+        }
+        console.log("All Reviewers:");
+        for (uint256 i = 0; i < allReviewers.length; i++) {
+            console.log(allReviewers[i]);
+        }
+
         // Assert that the shuffled reviewers are not in the same order as the original reviewers
         // This is a simplistic check and might need to be adjusted based on the shuffling algorithm's implementation details
         bool isShuffled = false;
