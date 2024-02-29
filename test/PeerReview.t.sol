@@ -218,4 +218,15 @@ contract PeerReviewTest is Test {
         }
         assertTrue(isShuffled, "Reviewers were not shuffled.");
     }
+
+        // Test for the contains function
+        function testStringContainsFunction() public {
+            // Test case where the substring is present
+            bool result1 = peerReview.contains("Solidity is awesome", "awesome");
+            assertTrue(result1, "The string should contain 'awesome'");
+
+            // Test case where the substring is not present
+            bool result2 = peerReview.contains("Solidity is awesome", "bad");
+            assertFalse(result2, "The string should not contain 'bad'");
+        }
 }
