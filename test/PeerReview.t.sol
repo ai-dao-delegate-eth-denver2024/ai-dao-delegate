@@ -160,7 +160,7 @@ contract PeerReviewTest is Test {
         string
             memory testData1 = "As a DAO voter, I prefer to raise the collateral threshold to ensure more commitment from proposal submitters.";
         uint256 submissionId1 = peerReview.submitData(testData1);
-        (, string memory data1, , , , ) = peerReview.getSubmission(
+        (, string memory data1, , , , , ) = peerReview.getSubmission(
             submissionId1
         );
         assertEq(data1, testData1, "Mismatch in first submission data");
@@ -169,7 +169,7 @@ contract PeerReviewTest is Test {
         string
             memory testData2 = "The DAO proposal team should describe their previous collaborations to demonstrate their ability to work together effectively.";
         uint256 submissionId2 = peerReview.submitData(testData2);
-        (, string memory data2, , , , ) = peerReview.getSubmission(
+        (, string memory data2, , , , , ) = peerReview.getSubmission(
             submissionId2
         );
         assertEq(data2, testData2, "Mismatch in second submission data");
@@ -246,7 +246,7 @@ contract PeerReviewTest is Test {
         peerReview.assignRandomSeedToSubmission(submissionId);
 
         // Retrieve the submission to check the assigned seed
-        (, , , , , uint256 seed) = peerReview.getSubmission(submissionId);
+        (, , , , , uint256 seed, ) = peerReview.getSubmission(submissionId);
 
         // Assert that the seed is not zero
         assertTrue(seed != 0, "Random seed should not be zero");
@@ -334,26 +334,47 @@ contract PeerReviewTest is Test {
         // Simulate voting by each reviewer
         vm.prank(reviewerAddresses[0]);
         peerReview.reviewerVote(1, submissionId);
-        (address author0, string memory data0, address[] memory selectedReviewers0, address[] memory shuffledReviewers0, bool isApproved0, uint256 seed0) = peerReview.getSubmission(submissionId);
-        console.log("After 1st vote: Author:", author0, "Data:", data0, "SelectedReviewers:", selectedReviewers0, "ShuffledReviewers:", shuffledReviewers0, "IsApproved:", isApproved0, "Seed:", seed0, "CountVotes:", countVotes0);
 
         vm.prank(reviewerAddresses[1]);
         peerReview.reviewerVote(1, submissionId);
-        (address author1, string memory data1, address[] memory selectedReviewers1, address[] memory shuffledReviewers1, bool isApproved1, uint256 seed1) = peerReview.getSubmission(submissionId);
-        console.log("After 2nd vote: Author:", author1, "Data:", data1, "SelectedReviewers:", selectedReviewers1, "ShuffledReviewers:", shuffledReviewers1, "IsApproved:", isApproved1, "Seed:", seed1, "CountVotes:", countVotes1);
 
         vm.prank(reviewerAddresses[2]);
         peerReview.reviewerVote(1, submissionId);
-        (address author2, string memory data2, address[] memory selectedReviewers2, address[] memory shuffledReviewers2, bool isApproved2, uint256 seed2) = peerReview.getSubmission(submissionId);
-        console.log("After 3rd vote: Author:", author2, "Data:", data2, "SelectedReviewers:", selectedReviewers2, "ShuffledReviewers:", shuffledReviewers2, "IsApproved:", isApproved2, "Seed:", seed2, "CountVotes:", countVotes2);
 
         // Assert that the submission's countVotes is 3
-        (, , , , , uint256 countVotes) = peerReview.getSubmission(submissionId);
-        assertEq(countVotes, 2, "Submission should have 2 votes.");
+        (, , , , , , uint256 countVotes) = peerReview.getSubmission(
+            submissionId
+        );
+        assertEq(countVotes, 3, "Submission should have 3 votes.");
     }
 
     // Test for the revealVotes function
-    // function testRevealVotes() public {
+    function testRevealVotes() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Create a new submission to have a context for revealing votes
+        string memory testData = "Test data for revealing votes";
+        uint256 submissionId = peerReview.submitData(testData);
+
+        // Assign votes to the submission
+        vm.prank(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+        peerReview.reviewerVote(1, submissionId);
+
+        // Attempt to reveal votes
+        bool revealResult = peerReview.revealVotes(submissionId);
+
+        // Assert that revealVotes returns true
+        assertTrue(revealResult, "Votes should be revealed as true.");
+    }
+
+    // Test for the revealVotes function
+
+    // function testRevealVotesFhe() public {
     //     // Setup initial reviewers and keywords
     //     setupReviewersAndKeywords();
 
@@ -363,16 +384,18 @@ contract PeerReviewTest is Test {
 
     //     // Assign votes to the submission
     //     vm.prank(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
-    //     peerReview.reviewerVote(1, submissionId);
+    //     peerReview.reviewerVoteFhe(1, submissionId);
     //     vm.prank(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
-    //     peerReview.reviewerVote(1, submissionId);
+    //     peerReview.reviewerVoteFhe(1, submissionId);
     //     vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
-    //     peerReview.reviewerVote(1, submissionId);
+    //     peerReview.reviewerVoteFhe(1, submissionId);
 
     //     // Attempt to reveal votes
-    //     bool revealResult = peerReview.revealVotes(submissionId);
+    //     bool revealResult = peerReview.revealVotesFhe(submissionId);
 
     //     // Assert that revealVotes returns true
     //     assertTrue(revealResult, "Votes should be revealed as true.");
     // }
+
+    //add new tests below
 }

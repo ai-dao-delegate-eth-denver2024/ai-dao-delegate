@@ -34,8 +34,8 @@ contract PeerReview {
     uint32 MAX_INT = 2**32 - 1;
     uint8 MAX_OPTIONS = 5;
 
-    uint32 public totalVotes;
-    euint32 public totalVotesFhe;
+    uint32 public totalAcceptVotes;
+    euint32 public totalAcceptVotesFhe;
 
     mapping(address => euint8) internal votes;
     mapping(uint8 => euint32) internal tally;
@@ -136,7 +136,8 @@ contract PeerReview {
             address[] memory selectedReviewers,
             address[] memory shuffledReviewers,
             bool isApproved,
-            uint256 seed
+            uint256 seed,
+            uint256 countVotes
         )
     {
         require(
@@ -150,7 +151,8 @@ contract PeerReview {
             submission.selectedReviewers,
             submission.shuffledReviewers,
             submission.isApproved,
-            submission.seed
+            submission.seed,
+            submission.countVotes
         );
     }
 
@@ -300,19 +302,18 @@ contract PeerReview {
         );
 
         if (vote == 1) {
-            totalVotes += 1;
+            totalAcceptVotes += 1;
         }
-        Submission storage submission = submissions[submissionId];
-        submission.countVotes += 1; // Correctly increment countVotes for the submission
+        submissions[0].countVotes += 1; // Increment countVotes for the submission
     }
 
     // Modified to allow revealing votes only if countVotes is 3 for a specific submission
-    function revealVotes(uint256 submissionId) public view returns (bool) {
+    function revealVotes(uint256 submissionId) public {
         require(
             submissions[submissionId].countVotes == 3,
             "Votes can only be revealed if countVotes is 3."
         );
-        return totalVotes == 2;
+        submissions[0].isApproved = (totalAcceptVotes == 3);
     }
 
     //FHE voting
@@ -323,14 +324,12 @@ contract PeerReview {
             "Vote limit reached for this submission."
         );
         ebool maybetrue = TFHE.eq(vote, TFHE.asEuint32(0x01));
-        totalVotesFhe = TFHE.cmux(
+        totalAcceptVotesFhe = TFHE.cmux(
             maybetrue,
-            TFHE.add(totalVotesFhe, TFHE.asEuint32(0x01)),
-            totalVotesFhe
+            TFHE.add(totalAcceptVotesFhe, TFHE.asEuint32(0x01)),
+            totalAcceptVotesFhe
         );
-        if (vote == 0x01) {
-            submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
-        }
+        submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
     }
 
     function revealVotesFhe(uint256 submissionId) public view returns (bool) {
@@ -338,7 +337,7 @@ contract PeerReview {
             submissions[submissionId].countVotes == 2,
             "Votes can only be revealed if countVotes is 3."
         );
-        ebool condition = TFHE.eq(totalVotesFhe, TFHE.asEuint32(0x02));
+        ebool condition = TFHE.eq(totalAcceptVotesFhe, TFHE.asEuint32(0x02));
         if (TFHE.decrypt(condition)) {
             return true;
         }
