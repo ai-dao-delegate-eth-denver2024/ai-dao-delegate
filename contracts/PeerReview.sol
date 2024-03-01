@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import "./MinimalERC721.sol";
 import "fhevm/lib/TFHE.sol";
 
-MinimalERC721 public nft;
+MinimalERC721 nft;
 
 contract PeerReview {
     struct Reviewer {
