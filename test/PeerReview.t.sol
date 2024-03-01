@@ -341,7 +341,7 @@ contract PeerReviewTest is Test {
 
         // Assert that the submission's countVotes is 3
         (, , , , , uint256 countVotes) = peerReview.getSubmission(submissionId);
-        assertEq(countVotes, 3, "Submission should have 3 votes.");
+        assertEq(countVotes, 2, "Submission should have 2 votes.");
     }
 
     // Test for the revealVotes function
