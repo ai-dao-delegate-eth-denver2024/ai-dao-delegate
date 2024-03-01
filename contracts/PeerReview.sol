@@ -290,9 +290,15 @@ contract PeerReview {
     }
 
     //plain text voting
-    function reviewerVote(uint32 vote) public {
+    // Modified to allow voting only if there are less than 3 submission's countVotes
+    // and increment countVotes every time someone casts a vote
+    function reviewerVote(uint32 vote, uint256 submissionId) public {
+        require(submissionId < submissions.length, "Invalid submission ID");
+        require(submissions[submissionId].countVotes < 3, "Vote limit reached for this submission.");
+        
         if (vote == 1) {
             totalVotes += 1;
+            submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
         }
     }
 
