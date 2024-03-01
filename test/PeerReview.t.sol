@@ -314,4 +314,57 @@ contract PeerReviewTest is Test {
         // Optionally, assert that the top reviewers are the expected ones based on the submission's content
         // This part can be more specific based on the setup of reviewers and keywords
     }
+
+    // Test for the reviewerVote function
+    function testReviewerVote() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Create a new submission to have a context for voting
+        string memory testData = "Test data for voting";
+        uint256 submissionId = peerReview.submitData(testData);
+
+        // Reviewer addresses for voting
+        address[3] memory reviewerAddresses = [
+            0x90F79bf6EB2c4f870365E785982E1f101E93b906, // Anvil's local test account 3
+            0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65, // Anvil's local test account 4
+            0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc // Anvil's local test account 5
+        ];
+
+        // Simulate voting by each reviewer
+        vm.prank(reviewerAddresses[0]);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(reviewerAddresses[1]);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(reviewerAddresses[2]);
+        peerReview.reviewerVote(1, submissionId);
+
+        // Assert that the submission's countVotes is 3
+        (, , , , , uint256 countVotes) = peerReview.getSubmission(submissionId);
+        assertEq(countVotes, 3, "Submission should have 3 votes.");
+    }
+
+    // Test for the revealVotes function
+    function testRevealVotes() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Create a new submission to have a context for revealing votes
+        string memory testData = "Test data for revealing votes";
+        uint256 submissionId = peerReview.submitData(testData);
+
+        // Assign votes to the submission
+        vm.prank(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+        peerReview.reviewerVote(1, submissionId);
+
+        // Attempt to reveal votes
+        bool revealResult = peerReview.revealVotes(submissionId);
+
+        // Assert that revealVotes returns true
+        assertTrue(revealResult, "Votes should be revealed as true.");
+    }
 }
