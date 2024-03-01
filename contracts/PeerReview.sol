@@ -302,7 +302,9 @@ contract PeerReview {
         }
     }
 
-    function revealVotes() public view returns (uint32) {
+    // Modified to allow revealing votes only if countVotes is 3 for a specific submission
+    function revealVotes(uint256 submissionId) public view returns (uint32) {
+        require(submissions[submissionId].countVotes == 3, "Votes can only be revealed if countVotes is 3.");
         return totalVotes;
     }
 
