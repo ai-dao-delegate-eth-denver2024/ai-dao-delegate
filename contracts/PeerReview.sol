@@ -294,8 +294,11 @@ contract PeerReview {
     // and increment countVotes every time someone casts a vote
     function reviewerVote(uint32 vote, uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
-        require(submissions[submissionId].countVotes < 3, "Vote limit reached for this submission.");
-        
+        require(
+            submissions[submissionId].countVotes < 3,
+            "Vote limit reached for this submission."
+        );
+
         if (vote == 1) {
             totalVotes += 1;
             submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
@@ -304,21 +307,40 @@ contract PeerReview {
 
     // Modified to allow revealing votes only if countVotes is 3 for a specific submission
     function revealVotes(uint256 submissionId) public view returns (uint32) {
-        require(submissions[submissionId].countVotes == 3, "Votes can only be revealed if countVotes is 3.");
+        require(
+            submissions[submissionId].countVotes == 2,
+            "Votes can only be revealed if countVotes is 3."
+        );
         return totalVotes;
     }
 
     //FHE voting
-    function reviewerVoteFhe(uint32 vote) public {
+    function reviewerVoteFhe(uint32 vote, uint256 submissionId) public {
+        require(submissionId < submissions.length, "Invalid submission ID");
+        require(
+            submissions[submissionId].countVotes < 3,
+            "Vote limit reached for this submission."
+        );
         ebool maybetrue = TFHE.eq(vote, TFHE.asEuint32(0x01));
         totalVotesFhe = TFHE.cmux(
             maybetrue,
             TFHE.add(totalVotesFhe, TFHE.asEuint32(0x01)),
             totalVotesFhe
         );
+        if (vote == 0x01) {
+            submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
+        }
     }
 
-    function revealVotesFhe() public view returns (euint32) {
+    function revealVotesFhe(uint256 submissionId)
+        public
+        view
+        returns (euint32)
+    {
+        require(
+            submissions[submissionId].countVotes == 2,
+            "Votes can only be revealed if countVotes is 3."
+        );
         return totalVotesFhe;
     }
 
