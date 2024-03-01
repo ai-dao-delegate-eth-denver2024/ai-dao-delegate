@@ -400,7 +400,35 @@ contract PeerReviewTest is Test {
     //     assertTrue(revealResult, "Votes should be revealed as true.");
     // }
 
-    //add new tests below
+    // Test to check if an NFT was minted after submission approval
+    function testNftMintingAfterApproval() public {
+        // Setup initial reviewers and keywords
+        setupReviewersAndKeywords();
+
+        // Create a new submission to have a context for minting NFT
+        string memory testData = "Test data for NFT minting";
+        uint256 submissionId = peerReview.submitData(testData);
+
+        // Assign votes to the submission to simulate approval
+        vm.prank(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+        peerReview.reviewerVote(1, submissionId);
+        vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+        peerReview.reviewerVote(1, submissionId);
+
+        // Reveal votes to update the isApproved status and potentially mint an NFT
+        peerReview.revealVotes(submissionId);
+
+        // Check if an NFT was minted by checking the total supply of NFTs
+        uint256 totalSupply = peerReview.nft.totalSupply();
+        assertEq(totalSupply, 1, "An NFT should have been minted.");
+
+        // Optionally, check if the owner of the minted NFT is the author of the submission
+        address author = peerReview.getSubmission(submissionId).author;
+        address nftOwner = peerReview.nft.ownerOf(1);
+        assertEq(nftOwner, author, "The author should own the minted NFT.");
+    }
 
     // Test for the getIsApproved function
     function testGetIsApproved() public {
