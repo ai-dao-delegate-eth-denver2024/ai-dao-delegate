@@ -244,6 +244,15 @@ contract PeerReview {
         return seed;
     }
 
+    // Function to get the approval status of a submission by its ID
+    function getIsApproved(uint256 submissionId) public view returns (bool) {
+        require(
+            submissionId < submissions.length,
+            "Submission does not exist."
+        );
+        return submissions[submissionId].isApproved;
+    }
+
     // Temporary structure to hold reviewer counts
     struct ReviewerCount {
         address reviewer;
