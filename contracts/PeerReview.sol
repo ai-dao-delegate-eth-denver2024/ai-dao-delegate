@@ -302,7 +302,8 @@ contract PeerReview {
         if (vote == 1) {
             totalVotes += 1;
         }
-        submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
+        Submission storage submission = submissions[submissionId];
+        submission.countVotes += 1; // Correctly increment countVotes for the submission
     }
 
     // Modified to allow revealing votes only if countVotes is 3 for a specific submission
