@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "./MinimalERC721.sol";
 import "fhevm/lib/TFHE.sol";
+
+MinimalERC721 public nft;
 
 contract PeerReview {
     struct Reviewer {
@@ -46,6 +49,7 @@ contract PeerReview {
         ROI_DENOMINATOR = _roiDenominator;
         owner = msg.sender;
         options = ["Yes", "No"];
+        nft = new MinimalERC721();
     }
 
     // Function to add an author, only callable by the owner
@@ -322,7 +326,10 @@ contract PeerReview {
             submissions[submissionId].countVotes == 3,
             "Votes can only be revealed if countVotes is 3."
         );
-        submissions[0].isApproved = (totalAcceptVotes == 3);
+        submissions[submissionId].isApproved = (totalAcceptVotes == 3);
+        if(submissions[submissionId].isApproved) {
+            nft.mint(submissions[submissionId].author);
+        }
     }
 
     //FHE voting
