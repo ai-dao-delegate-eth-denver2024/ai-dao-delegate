@@ -306,12 +306,12 @@ contract PeerReview {
     }
 
     // Modified to allow revealing votes only if countVotes is 3 for a specific submission
-    function revealVotes(uint256 submissionId) public view returns (uint32) {
+    function revealVotes(uint256 submissionId) public view returns (bool) {
         require(
             submissions[submissionId].countVotes == 2,
             "Votes can only be revealed if countVotes is 3."
         );
-        return totalVotes;
+        return totalVotes == 2;
     }
 
     //FHE voting
@@ -332,16 +332,16 @@ contract PeerReview {
         }
     }
 
-    function revealVotesFhe(uint256 submissionId)
-        public
-        view
-        returns (euint32)
-    {
+    function revealVotesFhe(uint256 submissionId) public view returns (bool) {
         require(
             submissions[submissionId].countVotes == 2,
             "Votes can only be revealed if countVotes is 3."
         );
-        return totalVotesFhe;
+        ebool condition = TFHE.eq(totalVotesFhe, TFHE.asEuint32(0x02));
+        if (TFHE.decrypt(condition)) {
+            return true;
+        }
+        return false;
     }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
