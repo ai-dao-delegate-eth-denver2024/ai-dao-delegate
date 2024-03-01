@@ -334,18 +334,36 @@ contract PeerReviewTest is Test {
         // Simulate voting by each reviewer
         vm.prank(reviewerAddresses[0]);
         peerReview.reviewerVote(1, submissionId);
-        (address author0, , , , , uint256 countVotes0) = peerReview.getSubmission(submissionId);
-        console.log("After 1st vote: Author:", author0, "CountVotes:", countVotes0);
+        (address author0, , , , , uint256 countVotes0) = peerReview
+            .getSubmission(submissionId);
+        console.log(
+            "After 1st vote: Author:",
+            author0,
+            "CountVotes:",
+            countVotes0
+        );
 
         vm.prank(reviewerAddresses[1]);
         peerReview.reviewerVote(1, submissionId);
-        (address author1, , , , , uint256 countVotes1) = peerReview.getSubmission(submissionId);
-        console.log("After 2nd vote: Author:", author1, "CountVotes:", countVotes1);
+        (address author1, , , , , uint256 countVotes1) = peerReview
+            .getSubmission(submissionId);
+        console.log(
+            "After 2nd vote: Author:",
+            author1,
+            "CountVotes:",
+            countVotes1
+        );
 
         vm.prank(reviewerAddresses[2]);
         peerReview.reviewerVote(1, submissionId);
-        (address author2, , , , , uint256 countVotes2) = peerReview.getSubmission(submissionId);
-        console.log("After 3rd vote: Author:", author2, "CountVotes:", countVotes2);
+        (address author2, , , , , uint256 countVotes2) = peerReview
+            .getSubmission(submissionId);
+        console.log(
+            "After 3rd vote: Author:",
+            author2,
+            "CountVotes:",
+            countVotes2
+        );
 
         // Assert that the submission's countVotes is 3
         (, , , , , uint256 countVotes) = peerReview.getSubmission(submissionId);
