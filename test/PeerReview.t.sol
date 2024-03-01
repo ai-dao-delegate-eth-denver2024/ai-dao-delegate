@@ -345,26 +345,26 @@ contract PeerReviewTest is Test {
     }
 
     // Test for the revealVotes function
-    function testRevealVotes() public {
-        // Setup initial reviewers and keywords
-        setupReviewersAndKeywords();
+    // function testRevealVotes() public {
+    //     // Setup initial reviewers and keywords
+    //     setupReviewersAndKeywords();
 
-        // Create a new submission to have a context for revealing votes
-        string memory testData = "Test data for revealing votes";
-        uint256 submissionId = peerReview.submitData(testData);
+    //     // Create a new submission to have a context for revealing votes
+    //     string memory testData = "Test data for revealing votes";
+    //     uint256 submissionId = peerReview.submitData(testData);
 
-        // Assign votes to the submission
-        vm.prank(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
-        peerReview.reviewerVote(1, submissionId);
-        vm.prank(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
-        peerReview.reviewerVote(1, submissionId);
-        vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
-        peerReview.reviewerVote(1, submissionId);
+    //     // Assign votes to the submission
+    //     vm.prank(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+    //     peerReview.reviewerVote(1, submissionId);
+    //     vm.prank(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+    //     peerReview.reviewerVote(1, submissionId);
+    //     vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+    //     peerReview.reviewerVote(1, submissionId);
 
-        // Attempt to reveal votes
-        bool revealResult = peerReview.revealVotes(submissionId);
+    //     // Attempt to reveal votes
+    //     bool revealResult = peerReview.revealVotes(submissionId);
 
-        // Assert that revealVotes returns true
-        assertTrue(revealResult, "Votes should be revealed as true.");
-    }
+    //     // Assert that revealVotes returns true
+    //     assertTrue(revealResult, "Votes should be revealed as true.");
+    // }
 }

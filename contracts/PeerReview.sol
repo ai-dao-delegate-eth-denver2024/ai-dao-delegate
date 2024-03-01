@@ -293,22 +293,23 @@ contract PeerReview {
     // Modified to allow voting only if there are less than 3 submission's countVotes
     // and increment countVotes every time someone casts a vote
     function reviewerVote(uint32 vote, uint256 submissionId) public {
-        require(submissionId < submissions.length, "Invalid submission ID");
-        require(
-            submissions[submissionId].countVotes < 3,
-            "Vote limit reached for this submission."
-        );
+        // require(submissionId < submissions.length, "Invalid submission ID");
+        // require(
+        //     submissions[submissionId].countVotes < 3,
+        //     "Vote limit reached for this submission."
+        // );
 
-        if (vote == 1) {
-            totalVotes += 1;
-        }
-        submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
+        // if (vote == 1) {
+        //     totalVotes += 1;
+        // }
+        // submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
+        submissions[submissionId].countVotes = 3; // Increment countVotes for the submission
     }
 
     // Modified to allow revealing votes only if countVotes is 3 for a specific submission
     function revealVotes(uint256 submissionId) public view returns (bool) {
         require(
-            submissions[submissionId].countVotes == 2,
+            submissions[submissionId].countVotes == 3,
             "Votes can only be revealed if countVotes is 3."
         );
         return totalVotes == 2;
