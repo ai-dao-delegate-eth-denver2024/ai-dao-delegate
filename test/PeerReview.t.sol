@@ -334,36 +334,18 @@ contract PeerReviewTest is Test {
         // Simulate voting by each reviewer
         vm.prank(reviewerAddresses[0]);
         peerReview.reviewerVote(1, submissionId);
-        (address author0, , , , , uint256 countVotes0) = peerReview
-            .getSubmission(submissionId);
-        console.log(
-            "After 1st vote: Author:",
-            author0,
-            "CountVotes:",
-            countVotes0
-        );
+        (address author0, string memory data0, address[] memory selectedReviewers0, address[] memory shuffledReviewers0, bool isApproved0, uint256 seed0) = peerReview.getSubmission(submissionId);
+        console.log("After 1st vote: Author:", author0, "Data:", data0, "SelectedReviewers:", selectedReviewers0, "ShuffledReviewers:", shuffledReviewers0, "IsApproved:", isApproved0, "Seed:", seed0, "CountVotes:", countVotes0);
 
         vm.prank(reviewerAddresses[1]);
         peerReview.reviewerVote(1, submissionId);
-        (address author1, , , , , uint256 countVotes1) = peerReview
-            .getSubmission(submissionId);
-        console.log(
-            "After 2nd vote: Author:",
-            author1,
-            "CountVotes:",
-            countVotes1
-        );
+        (address author1, string memory data1, address[] memory selectedReviewers1, address[] memory shuffledReviewers1, bool isApproved1, uint256 seed1) = peerReview.getSubmission(submissionId);
+        console.log("After 2nd vote: Author:", author1, "Data:", data1, "SelectedReviewers:", selectedReviewers1, "ShuffledReviewers:", shuffledReviewers1, "IsApproved:", isApproved1, "Seed:", seed1, "CountVotes:", countVotes1);
 
         vm.prank(reviewerAddresses[2]);
         peerReview.reviewerVote(1, submissionId);
-        (address author2, , , , , uint256 countVotes2) = peerReview
-            .getSubmission(submissionId);
-        console.log(
-            "After 3rd vote: Author:",
-            author2,
-            "CountVotes:",
-            countVotes2
-        );
+        (address author2, string memory data2, address[] memory selectedReviewers2, address[] memory shuffledReviewers2, bool isApproved2, uint256 seed2) = peerReview.getSubmission(submissionId);
+        console.log("After 3rd vote: Author:", author2, "Data:", data2, "SelectedReviewers:", selectedReviewers2, "ShuffledReviewers:", shuffledReviewers2, "IsApproved:", isApproved2, "Seed:", seed2, "CountVotes:", countVotes2);
 
         // Assert that the submission's countVotes is 3
         (, , , , , uint256 countVotes) = peerReview.getSubmission(submissionId);
