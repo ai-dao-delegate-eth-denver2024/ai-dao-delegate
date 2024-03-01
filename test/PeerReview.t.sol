@@ -365,11 +365,14 @@ contract PeerReviewTest is Test {
         vm.prank(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
         peerReview.reviewerVote(1, submissionId);
 
-        // Attempt to reveal votes
-        bool revealResult = peerReview.revealVotes(submissionId);
+        // Reveal votes to update the isApproved status
+        peerReview.revealVotes(submissionId);
+
+        // Check the approval status of the submission
+        bool isApproved = peerReview.getIsApproved(submissionId);
 
         // Assert that revealVotes returns true
-        assertTrue(revealResult, "Votes should be revealed as true.");
+        assertTrue(isApproved, "Votes should be revealed as true.");
     }
 
     // Test for the revealVotes function

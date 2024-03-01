@@ -10,7 +10,7 @@ contract MinimalERC721 is ERC721 {
 
     function mint(address to) public returns (uint256) {
         ++_tokenIds;
-        uint256 newItemId = _tokenIds.current();
+        uint256 newItemId = _tokenIds;
         _mint(to, newItemId);
         return newItemId;
     }

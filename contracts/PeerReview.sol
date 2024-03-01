@@ -3,8 +3,6 @@ pragma solidity ^0.8.0;
 import "./MinimalERC721.sol";
 import "fhevm/lib/TFHE.sol";
 
-MinimalERC721 nft;
-
 contract PeerReview {
     struct Reviewer {
         address addr;
@@ -26,6 +24,7 @@ contract PeerReview {
     Submission[] public submissions;
     string public LICENSE;
     uint256 public ROI_DENOMINATOR;
+    MinimalERC721 public nft;
 
     address public owner;
 
@@ -327,7 +326,7 @@ contract PeerReview {
             "Votes can only be revealed if countVotes is 3."
         );
         submissions[submissionId].isApproved = (totalAcceptVotes == 3);
-        if(submissions[submissionId].isApproved) {
+        if (submissions[submissionId].isApproved) {
             nft.mint(submissions[submissionId].author);
         }
     }
