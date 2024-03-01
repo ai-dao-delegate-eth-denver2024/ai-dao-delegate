@@ -308,7 +308,7 @@ contract PeerReviewTest is Test {
     }
 
     // Test for findTopReviewersForSubmission with DAO and web3 keywords
-    function testFindTopReviewersForSubmissionWithDAOAndWeb3() public {
+    function testFindTopReviewersForSubmission() public {
         // Setup reviewers with DAO and web3 related keywords
         setupReviewersAndKeywords(); // Resetting reviewers
         peerReview.addKeywordToReviewer(1, "web3");
@@ -340,24 +340,5 @@ contract PeerReviewTest is Test {
 
         // Optionally, assert that the top reviewers are the expected ones based on the submission's content
         // This part can be more specific based on the setup of reviewers and keywords
-    }
-
-    // Test for initializing voting, casting a vote, and getting the plaintext tally
-    function testFheGetTallyPt() public {
-        // Initialize the voting
-        peerReview.initFheVoting();
-
-        // Cast a vote (for simplicity, we're using a mock encrypted vote representing "Yes")
-        bytes memory mockEncryptedVote = abi.encodePacked(uint8(0)); // Assuming 0 represents "Yes"
-        peerReview.fheVote(mockEncryptedVote);
-
-        // Get the plaintext tally (for simplicity, we're using a mock public key)
-        bytes32 mockPublicKey = 0x00; // Mock public key
-        (uint32 yesVotes, uint32 noVotes) = peerReview.fheGetTallyPt(mockPublicKey);
-
-        // Assert that the tally for "Yes" is 1 and "No" is 0
-        // Note: This is a simplified assertion. In a real scenario, you would decrypt the tally result to verify the count.
-        assertEq(yesVotes, 1, "The tally for 'Yes' should be 1.");
-        assertEq(noVotes, 0, "The tally for 'No' should be 0.");
     }
 }

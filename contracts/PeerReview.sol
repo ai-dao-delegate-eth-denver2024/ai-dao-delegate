@@ -33,6 +33,9 @@ contract PeerReview {
     uint32 MAX_INT = 2**32 - 1;
     uint8 MAX_OPTIONS = 5;
 
+    uint32 public totalVotes;
+    euint32 public totalVotesFhe;
+
     mapping(address => euint8) internal votes;
     mapping(uint8 => euint32) internal tally;
 
@@ -293,6 +296,33 @@ contract PeerReview {
             encOptions.push(TFHE.asEuint8(i));
         }
     }
+
+    //plain text voting
+    function reviewerVote(uint32 vote) public {
+        if (vote == 0x01) {
+            totalVotes += 1;
+        }
+    }
+
+    function revealVotes() public view returns (uint32) {
+        return totalVotes;
+    }
+
+    //FHE voting
+    function reviewerVoteFhe(euint32 vote) public {
+        ebool maybetrue = TFHE.eq(vote, TFHE.asEuint32(0x01));
+        totalVotesFhe = TFHE.cmux(
+            maybetrue,
+            TFHE.add(totalVotesFhe, TFHE.asEuint32(0x01)),
+            totalVotesFhe
+        );
+    }
+
+    function revealVotesFhe() public view returns (euint32) {
+        return totalVotesFhe;
+    }
+
+    //end fhe voting
 
     function fheVote(bytes memory encOption) public {
         euint8 option = TFHE.asEuint8(encOption);
