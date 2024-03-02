@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { MetaMaskButton } from "@metamask/sdk-react-ui";
 // import { useSDK } from '@metamask/sdk-react-ui'
 import { ethers } from 'ethers'
@@ -15,6 +15,7 @@ interface IInputField {
 }
 
 function App() {
+  const [activeTab, setActiveTab] = useState('owner');
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
   // const provider = new ethers.BrowserProvider(window.ethereum);
   // const signer = provider.getSigner();
@@ -304,23 +305,73 @@ function App() {
       </div>
       <h1>peer tunning AI</h1>
 
-      <InteractionForm
-        description="add author"
-        defaultInputs={[{ name: "author", value: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", description: "author" }]}
-        contractFunction={(signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.addAuthor(inputObject.value);
-        }}
-      />
-      <InteractionForm
-        description="Get Authors"
-        defaultInputs={[]}
-        contractFunction={async (signer: ethers.Signer) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getAuthors();
-        }}
-        isReadCall={true}
-      />
+      <div>
+        <button onClick={() => setActiveTab('owner')}>Owner</button>
+        <button onClick={() => setActiveTab('author')}>Author</button>
+        <button onClick={() => setActiveTab('reviewers')}>Reviewers</button>
+      </div>
+      {activeTab === 'owner' && (
+        <>
+          <InteractionForm
+            description="add author"
+            defaultInputs={[{ name: "author", value: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", description: "author" }]}
+            contractFunction={(signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.addAuthor(inputObject.value);
+            }}
+          />
+          <InteractionForm
+            description="add reviewer"
+            defaultInputs={[
+              { name: "reviewer", value: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", description: "reviewer" },
+              { name: "keywords", value: "dao", description: "keywords" }
+            ]}
+            contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              const keywordsArray = inputObject2.value.split(',').map(keyword => keyword.trim());
+              return contract.addReviewer(inputObject1.value, keywordsArray);
+            }}
+          />
+        </>
+      )}
+      {activeTab === 'author' && (
+        <>
+          <InteractionForm
+            description="Submit Data"
+            defaultInputs={[{ name: "data", value: "write some really clever text in the form of instruction and response.", description: "Data to submit" }]}
+            contractFunction={(signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.submitData(inputObject.value);
+            }}
+          />
+        </>
+      )}
+      {activeTab === 'reviewers' && (
+        <>
+          <InteractionForm
+            description="Add Keyword to Reviewer"
+            defaultInputs={[
+              { name: "reviewerIndex", value: "0", description: "Reviewer Index" },
+              { name: "newKeyword", value: "", description: "New Keyword" }
+            ]}
+            contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.addKeywordToReviewer(inputObject1.value, inputObject2.value);
+            }}
+          />
+          <InteractionForm
+            description="Reviewer Vote"
+            defaultInputs={[
+              { name: "submissionId", value: "0", description: "Submission ID" },
+              { name: "vote", value: "1", description: "Vote (1 for accept, 0 for reject)" }
+            ]}
+            contractFunction={async (signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.reviewerVote(inputObject2.value, inputObject1.value);
+            }}
+          />
+        </>
+      )}
 
       <InteractionForm
         description="add reviewer"
