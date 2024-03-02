@@ -253,6 +253,7 @@ function App() {
   const [mintResult, setMintResult] = useState(null);
   const [showMintResult, setShowMintResult] = useState(false);
   const [showMintNFTSection, setShowMintNFTSection] = useState(false);
+  const [showOnChainSection, setShowOnChainSection] = useState(false);
 
   const mintRequest = async (toAddress, itemId) => {
     const url = 'https://admin-api.phosphor.xyz/v1/mint-requests';
@@ -534,63 +535,70 @@ function App() {
 
       <br />
 
-      <h3>see what is on-chain</h3>
-      <InteractionForm
-        description="Get Reviewers"
-        defaultInputs={[]}
-        contractFunction={async (signer: ethers.Signer) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getReviewers();
-        }}
-        isReadCall={true}
-      />
-      <InteractionForm
-        description="Get Reviewer Keywords"
-        defaultInputs={[{ name: "reviewerAddress", value: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", description: "Reviewer Address" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getReviewerKeywords(inputObject.value);
-        }}
-        isReadCall={true}
-      />
-      <InteractionForm
-        description="Get Submission"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          const submissionId = inputObject.value;
-          const result = await contract.getSubmission(submissionId);
-          return {
-            author: result.author,
-            data: result.data,
-            selectedReviewers: result.selectedReviewers,
-            shuffledReviewers: result.shuffledReviewers,
-            isApproved: result.isApproved,
-            seed: result.seed.toString(),
-            countVotes: result.countVotes.toString()
-          };
-        }}
-        isReadCall={true}
-      />
-      <InteractionForm
-        description="Get Shuffled Reviewers"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getShuffledReviewers(inputObject.value);
-        }}
-        isReadCall={true}
-      />
-      <InteractionForm
-        description="Get Selected Reviewers"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getSelectedReviewers(inputObject.value);
-        }}
-        isReadCall={true}
-      />
-      <br />
+      <button onClick={() => setShowOnChainSection(!showOnChainSection)}>
+        {showOnChainSection ? 'Hide On-Chain Section' : 'Show On-Chain Section'}
+      </button>
+      {showOnChainSection && (
+        <>
+          <h3>see what is on-chain</h3>
+          <InteractionForm
+            description="Get Reviewers"
+            defaultInputs={[]}
+            contractFunction={async (signer: ethers.Signer) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.getReviewers();
+            }}
+            isReadCall={true}
+          />
+          <InteractionForm
+            description="Get Reviewer Keywords"
+            defaultInputs={[{ name: "reviewerAddress", value: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", description: "Reviewer Address" }]}
+            contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.getReviewerKeywords(inputObject.value);
+            }}
+            isReadCall={true}
+          />
+          <InteractionForm
+            description="Get Submission"
+            defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+            contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              const submissionId = inputObject.value;
+              const result = await contract.getSubmission(submissionId);
+              return {
+                author: result.author,
+                data: result.data,
+                selectedReviewers: result.selectedReviewers,
+                shuffledReviewers: result.shuffledReviewers,
+                isApproved: result.isApproved,
+                seed: result.seed.toString(),
+                countVotes: result.countVotes.toString()
+              };
+            }}
+            isReadCall={true}
+          />
+          <InteractionForm
+            description="Get Shuffled Reviewers"
+            defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+            contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.getShuffledReviewers(inputObject.value);
+            }}
+            isReadCall={true}
+          />
+          <InteractionForm
+            description="Get Selected Reviewers"
+            defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+            contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.getSelectedReviewers(inputObject.value);
+            }}
+            isReadCall={true}
+          />
+          <br />
+        </>
+      )}
 
       <button onClick={async () => {
         const SCHEMA = '(bool hasCompletedTutoriall)';
