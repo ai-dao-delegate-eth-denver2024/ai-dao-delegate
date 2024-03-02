@@ -48,7 +48,9 @@ function App() {
         ]}
         contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.addReviewer(inputObject1.value, inputObject2.value);
+          // Split the keywords string by comma to create an array, trimming whitespace from each keyword
+          const keywordsArray = inputObject2.value.split(',').map(keyword => keyword.trim());
+          return contract.addReviewer(inputObject1.value, keywordsArray);
         }}
       />
       <InteractionForm
