@@ -151,6 +151,17 @@ function App() {
         }}
         isReadCall={true}
       />
+      <InteractionForm
+        description="Reviewer Vote"
+        defaultInputs={[
+          { name: "submissionId", value: "0", description: "Submission ID" },
+          { name: "vote", value: "1", description: "Vote (1 for accept, 0 for reject)" }
+        ]}
+        contractFunction={async (signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.reviewerVote(inputObject2.value, inputObject1.value);
+        }}
+      />
       Follow @kirill_igum
     </>
   )
