@@ -202,7 +202,8 @@ function App() {
       }
 
       const result = await response.json();
-      console.log('Collection created:', result);
+      console.log('Item locked:', result);
+      setLockItemResult(result); // Store the lock item result
       // Handle success
     } catch (error) {
       console.error('Failed to create collection:', error);
@@ -212,6 +213,8 @@ function App() {
 
 
   const [lockCollectionId, setLockCollectionId] = useState('');
+  const [lockItemResult, setLockItemResult] = useState(null);
+  const [showLockItemResult, setShowLockItemResult] = useState(false);
   const lockItem = async (collectionId) => {
     const url = 'https://admin-api.phosphor.xyz/v1/items/lock';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
@@ -497,6 +500,9 @@ function App() {
             onChange={(e) => setLockCollectionId(e.target.value)}
           />
           <button onClick={() => lockItem(lockCollectionId)}>Lock Item</button>
+          <button onClick={() => setShowLockItemResult(!showLockItemResult)}>
+            {showLockItemResult ? 'Hide Lock Item Result' : 'Show Lock Item Result'}
+          </button>
         </div>
         <button onClick={mintRequest}>mint item</button>
         <div>
@@ -517,6 +523,12 @@ function App() {
             <h3>Collection Creation Result:</h3>
             <h4>Collection ID: {collectionResult.id}</h4>
             <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
+          </div>
+        )}
+        {showLockItemResult && lockItemResult && (
+          <div>
+            <h3>Lock Item Result:</h3>
+            <pre>{JSON.stringify(lockItemResult, null, 2)}</pre>
           </div>
         )}
         {itemResult.imageUrl && itemResult.description && (
