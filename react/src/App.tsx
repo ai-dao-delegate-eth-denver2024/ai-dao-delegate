@@ -105,13 +105,20 @@ function App() {
       // Handle error
     }
   };
+  const [collectionName, setCollectionName] = useState('');
+  const [collectionSymbol, setCollectionSymbol] = useState('');
+
   const createCollection = async () => {
+    if (!collectionName || !collectionSymbol) {
+      alert('Please provide both name and symbol');
+      return;
+    }
     const url = 'https://admin-api.phosphor.xyz/v1/collections';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
     const apiKey = "9be29dde5932444fb00536722827a414";
 
     const data = {
-      "name": "col01",
+      "name": collectionName,
       "default_item_type_id": null,
       "image_url": null,
       "reveal_strategy": "INSTANT",
@@ -121,7 +128,7 @@ function App() {
         "type": "PLATFORM",
         "token_id_assignment_strategy": "AUTOMATIC",
         "platform": {
-          "symbol": "ABC",
+          "symbol": collectionSymbol,
           "variant": "FlexibleERC721"
         },
         "network_id": 59140
@@ -441,7 +448,7 @@ function App() {
             placeholder="Symbol"
             onChange={(e) => setCollectionSymbol(e.target.value)}
           />
-          <button onClick={() => createCollection(collectionName, collectionSymbol)}>Create Collection</button>
+          <button onClick={() => createCollection()}>Create Collection</button>
         </div>
         <button onClick={fetchCollections}>Fetch Collection</button>
         <button onClick={createItem}>create item</button>
