@@ -109,6 +109,15 @@ function App() {
         }}
         isReadCall={true}
       />
+      <InteractionForm
+        description="Get Reviewer Keywords"
+        defaultInputs={[{ name: "reviewerAddress", value: "", description: "Reviewer Address" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.getReviewerKeywords(inputObject.value);
+        }}
+        isReadCall={true}
+      />
       Follow @kirill_igum
     </>
   )
