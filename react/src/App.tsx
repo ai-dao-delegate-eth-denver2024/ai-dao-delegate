@@ -130,6 +130,8 @@ function App() {
         "platform": {
           "symbol": collectionSymbol,
           "variant": "FlexibleERC721"
+          // "owner": "0x5873298b68497fad590f68221D9a8d134902DE64",
+
         },
         "network_id": 59140
       }
