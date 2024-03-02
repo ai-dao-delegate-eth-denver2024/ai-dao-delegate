@@ -162,6 +162,14 @@ function App() {
           return contract.reviewerVote(inputObject2.value, inputObject1.value);
         }}
       />
+      <InteractionForm
+        description="Reveal Votes"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.revealVotes(inputObject.value);
+        }}
+      />
       Follow @kirill_igum
     </>
   )
