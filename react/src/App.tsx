@@ -156,7 +156,7 @@ function App() {
       const result = await response.json();
       console.log('Collection created:', result);
       setCollectionResult(result);
-      setShowCollectionResult(true); // Automatically show the result upon creation
+      // setShowCollectionResult(true); // Automatically show the result upon creation
       // Handle success
     } catch (error) {
       console.error('Failed to create collection:', error);
