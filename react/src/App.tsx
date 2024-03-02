@@ -158,7 +158,8 @@ function App() {
       }
 
       const result = await response.json();
-      console.log('Collection created:', result);
+      console.log('Item created:', result);
+      setItemResult({ title, description, imageUrl }); // Update the itemResult state with the submitted item details
       setCollectionResult(result);
       setCollectionId(result.id);
       // setShowCollectionResult(true); // Automatically show the result upon creation
@@ -169,7 +170,10 @@ function App() {
     }
   };
 
+  const [itemResult, setItemResult] = useState({ title: '', description: '', imageUrl: '' });
+
   const createItemWithDetails = async (collectionId, title, description, imageUrl) => {
+    setItemResult({ title, description, imageUrl });
     const url = 'https://admin-api.phosphor.xyz/v1/items';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
     const apiKey = "9be29dde5932444fb00536722827a414";
@@ -507,6 +511,12 @@ function App() {
             <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
           </div>
         )}
+        <div>
+          <h3>Submitted Item Details:</h3>
+          <p>Title: {itemResult.title}</p>
+          <p>Description: {itemResult.description}</p>
+          <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
+        </div>
       </div>
       {/* <InteractionForm */}
       {/*   description="Check if Submission is Approved" */}
