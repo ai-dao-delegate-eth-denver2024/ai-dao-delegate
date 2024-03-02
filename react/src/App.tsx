@@ -237,6 +237,25 @@ function App() {
       />
       <button onClick={createCollection}>Create Collection</button>
 
+      <button onClick={async () => {
+        try {
+          const response = await fetch('https://admin-api.phosphor.xyz/v1/collections?limit=1', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              // Include any required headers here
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+          }
+          const result = await response.json();
+          console.log('Fetched collection:', result);
+        } catch (error) {
+          console.error('Failed to fetch collection:', error);
+        }
+      }}>Fetch Collection</button>
+
       Follow @kirill_igum
     </>
   )
