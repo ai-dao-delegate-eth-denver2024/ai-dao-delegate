@@ -143,6 +143,14 @@ function App() {
         }}
         isReadCall={true}
       />
+      <InteractionForm
+        description="Find Top Reviewers for Submission"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.findTopReviewersForSubmission(inputObject.value);
+        }}
+      />
       Follow @kirill_igum
     </>
   )
