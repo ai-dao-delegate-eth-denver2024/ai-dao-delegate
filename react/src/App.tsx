@@ -118,6 +118,14 @@ function App() {
         }}
         isReadCall={true}
       />
+      <InteractionForm
+        description="Assign Random Seed to Submission"
+        defaultInputs={[{ name: "submissionId", value: "", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.assignRandomSeedToSubmission(inputObject.value);
+        }}
+      />
       Follow @kirill_igum
     </>
   )
