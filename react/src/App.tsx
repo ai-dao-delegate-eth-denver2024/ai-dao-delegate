@@ -14,16 +14,16 @@ interface IInputField {
 
 function App() {
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
-  const createCollection = async () => {
-  };
 
   const fetchCollections = async () => {
-    const url = 'https://admin-api.phosphor.xyz/v1/collections?limit=1';
+    const url = 'https://admin-api.phosphor.xyz/v1/collections';
+    const apiKey = "9be29dde5932444fb00536722827a414";
     try {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Phosphor-Api-Key': `${apiKey}` // Using the API key
           // Add any required headers here
         },
       });
@@ -40,12 +40,38 @@ function App() {
       // Handle error
     }
   };
+  const getMintRequest = async () => {
+    const url = 'https://admin-api.phosphor.xyz/v1/mint-requests';
+    const apiKey = "9be29dde5932444fb00536722827a414";
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Phosphor-Api-Key': `${apiKey}` // Using the API key
+          // Add any required headers here
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Fetched collections:', result);
+      // Handle success
+    } catch (error) {
+      console.error('Failed to fetch collections:', error);
+      // Handle error
+    }
+  };
+  const createCollection = async () => {
     const url = 'https://admin-api.phosphor.xyz/v1/collections';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
     const apiKey = "9be29dde5932444fb00536722827a414";
 
     const data = {
-      "name": "Collection ABC2",
+      "name": "col01",
       "default_item_type_id": null,
       "image_url": null,
       "reveal_strategy": "INSTANT",
@@ -60,6 +86,109 @@ function App() {
         },
         "network_id": 59140
       }
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Phosphor-Api-Key': `${apiKey}` // Using the API key
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Collection created:', result);
+      // Handle success
+    } catch (error) {
+      console.error('Failed to create collection:', error);
+      // Handle error
+    }
+  };
+
+  const createItem = async () => {
+    const url = 'https://admin-api.phosphor.xyz/v1/items';
+    // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
+    const apiKey = "9be29dde5932444fb00536722827a414";
+    const data = {
+      "collection_id": "42b6b890-e326-4980-b42d-a6f4c895014c",
+      "attributes": {
+        "title": "item-title",
+        "description": "item-description",
+        "image_url": "https://en.wikipedia.org/wiki/Main_Page#/media/File:King-Edward-VII_(cropped).jpg",
+      },
+      "item_type_id": null,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Phosphor-Api-Key': `${apiKey}` // Using the API key
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Collection created:', result);
+      // Handle success
+    } catch (error) {
+      console.error('Failed to create collection:', error);
+      // Handle error
+    }
+  };
+
+
+  const lockItem = async () => {
+    const url = 'https://admin-api.phosphor.xyz/v1/items/lock';
+    // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
+    const apiKey = "9be29dde5932444fb00536722827a414";
+    const data = {
+      "collection_id": "42b6b890-e326-4980-b42d-a6f4c895014c"
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Phosphor-Api-Key': `${apiKey}` // Using the API key
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Collection created:', result);
+      // Handle success
+    } catch (error) {
+      console.error('Failed to create collection:', error);
+      // Handle error
+    }
+  };
+
+  const mintRequest = async () => {
+    const url = 'https://admin-api.phosphor.xyz/v1/mint-requests';
+    // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
+    const apiKey = "9be29dde5932444fb00536722827a414";
+    const data = {
+      "quantity": "1",
+      "to_address": "0x5873298b68497fad590f68221D9a8d134902DE64",
+      // "collection_id": "42b6b890-e326-4980-b42d-a6f4c895014c"
+      "item_id": "4e8bddc3-1b7e-4c4c-aeea-d99b625ac7b4"
     };
 
     try {
@@ -260,49 +389,16 @@ function App() {
         }}
         isReadCall={true}
       />
-      <button onClick={createCollection}>Create Collection</button>
-
-      <button onClick={fetchCollections}>Fetch Collections</button>
+      <div>
+        <button onClick={createCollection}>Create Collection</button>
+        <button onClick={createItem}>create item</button>
+        <button onClick={lockItem}>lock item</button>
+        <button onClick={mintRequest}>mint item</button>
+        <button onClick={getMintRequest}>get mint request</button>
+      </div>
 
       Follow @kirill_igum
     </>
   )
 }
 export default App
-
-/*
-      <InteractionForm
-        description="Announce Prompt Response"
-        defaultInputs={[
-          { name: 'conversationId', value: "0", description: 'Conversation ID' },
-          { name: 'iResponse', value: "0", description: 'Response Index' },
-          { name: 'iSplitResponse', value: "0", description: 'Split Response Index' },
-          { name: 'splitResponse', value: "", description: 'Split Response' }
-        ]}
-        contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField, inputObject3: IInputField, inputObject4: IInputField) => {
-          const contract = new ethers.Contract(contractAddress, TrustAndTeachABI, signer);
-          const conversationId = ethers.BigNumber.from(inputObject1.value);
-          const iResponse = ethers.BigNumber.from(inputObject2.value);
-          const iSplitResponse = ethers.BigNumber.from(inputObject3.value);
-          return contract.announcePromptResponse(conversationId, iResponse, iSplitResponse, inputObject4.value);
-        }}
-      />
-      <InteractionForm
-        description="Get Conversation by ID"
-        defaultInputs={[{ name: 'conversationId', value: "0", description: 'Conversation ID' }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(contractAddress, TrustAndTeachABI, signer);
-          const result = await contract.getConversationById(ethers.BigNumber.from(inputObject.value));
-          return {
-            author: result.author,
-            prompt: result.prompt,
-            responses: result.responses,
-            rankSubmissionCount: result.rankSubmissionCount.toNumber(),
-            usersWhoSubmittedRanks: result.usersWhoSubmittedRanks.map(ethers.utils.getAddress),
-            createInstructionTimestamp: new Date(result.createInstructionTimestamp.toNumber() * 1000).toISOString(),
-            responseAnnouncedTimestamp: new Date(result.responseAnnouncedTimestamp.toNumber() * 1000).toISOString()
-          };
-        }}
-        isReadCall={true}
-      />
-*/
