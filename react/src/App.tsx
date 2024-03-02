@@ -77,7 +77,7 @@ function App() {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
           const submissionId = inputObject.value;
           const result = await contract.getSubmission(submissionId);
-          return JSON.stringify({
+          return {
             author: result.author,
             data: result.data,
             selectedReviewers: result.selectedReviewers,
@@ -85,7 +85,7 @@ function App() {
             isApproved: result.isApproved,
             seed: result.seed.toString(),
             countVotes: result.countVotes.toString()
-          }, null, 2);
+          };
         }}
         isReadCall={true}
       />
