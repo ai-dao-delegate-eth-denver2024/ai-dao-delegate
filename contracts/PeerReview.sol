@@ -291,6 +291,85 @@ contract PeerReview {
         submissions[submissionId].selectedReviewers = topReviewers;
     }
 
+    // // Find top 3 matching reviewers for a submission
+    // function findReviewers(uint256 submissionId) public {
+    //   // The shuffleReviewers call is updated to shuffle and store reviewers in the Submission struct
+    //   shuffleReviewers(submissionId); // This call now populates the shuffledReviewers field in the Submission struct
+    //   require(submissionId < submissions.length, "Invalid submission ID");
+    //   Submission storage submission = submissions[submissionId];
+
+    //   address[] memory topReviewers = new address[](3);
+    //   uint256[] memory topReviewersValue = new uint256[](3);
+
+    //   uint256[] memory scores = new uint256[](submission.shuffledReviewers.length);
+    //   for (uint256 i = 0; i < submission.shuffledReviewers.length; i++) {
+    //     address reviewerAddr = submission.shuffledReviewers[i];
+    //     // Find the reviewer in the global reviewers array to access their keywords
+    //     for (uint256 k = 0; k < reviewers.length; k++) {
+    //       if (reviewers[k].addr == reviewerAddr) {
+    //         for (uint256 j = 0; j < reviewers[k].keywords.length; j++) {
+    //           if (
+    //             contains(submission.question, reviewers[k].keywords[j]) ||
+    //             contains(submission.response, reviewers[k].keywords[j])
+    //           ) {
+    //             scores[i]++;
+    //           }
+    //         }
+    //         break; // Break the loop once the matching reviewer is found
+    //       }
+    //     }
+
+    //     if (scores[i] >= topReviewersValue[0]) {
+    //       topReviewersValue[2] = topReviewersValue[1];
+    //       topReviewersValue[1] = topReviewersValue[0];
+    //       topReviewersValue[0] = scores[i];
+    //       topReviewers[2] = topReviewers[1];
+    //       topReviewers[1] = topReviewers[0];
+    //       topReviewers[0] = reviewerAddr;
+    //     } else if (scores[i] > topReviewersValue[1]) {
+    //       topReviewersValue[2] = topReviewersValue[1];
+    //       topReviewersValue[1] = scores[i];
+    //       topReviewers[2] = topReviewers[1];
+    //       topReviewers[1] = reviewerAddr;
+    //     } else if (scores[i] > topReviewersValue[2]) {
+    //       topReviewersValue[2] = scores[i];
+    //       topReviewers[2] = reviewerAddr;
+    //     }
+    //   }
+
+    //   submission.selectedReviewers = topReviewers;
+    // }
+
+    //    function findThreeLargest(uint[] memory arr) public pure returns (uint[3] memory) {
+    //        require(arr.length >= 3, "Array must have at least three elements");
+    //
+    //        uint[3] memory largestElements;
+    //
+    //        // Initialize the largestElements array with the first three elements of the input array
+    //        for (uint i = 0; i < 3; i++) {
+    //            largestElements[i] = arr[i];
+    //        }
+    //
+    //        // Find the three largest elements in the array
+    //        for (uint i = 3; i < arr.length; i++) {
+    //            if (arr[i] > largestElements[0]) {
+    //                largestElements[2] = largestElements[1];
+    //                largestElements[1] = largestElements[0];
+    //                largestElements[0] = arr[i];
+    //            } else if (arr[i] > largestElements[1]) {
+    //                largestElements[2] = largestElements[1];
+    //                largestElements[1] = arr[i];
+    //            } else if (arr[i] > largestElements[2]) {
+    //                largestElements[2] = arr[i];
+    //            }
+    //        }
+    //
+    //        return largestElements;
+    //    }
+
+    //
+    //        return largestElements;
+    //    }
     //plain text voting
     // Modified to allow voting only if there are less than 3 submission's countVotes
     // and increment countVotes every time someone casts a vote
