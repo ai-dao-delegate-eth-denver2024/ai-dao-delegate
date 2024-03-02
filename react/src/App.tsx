@@ -24,7 +24,35 @@ function App() {
   // const sdkConf = chainId === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
   // const veraxSdk = new VeraxSdk(sdkConf, address);
   const sdkConf =  VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
+  const [transactionId, setTransactionId] = useState('');
   const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64" );
+
+  const getTransactionDetails = async () => {
+    if (!transactionId) {
+      alert('Please enter a transaction ID');
+      return;
+    }
+    const url = `https://admin-api.phosphor.xyz/v1/transactions/${transactionId}`;
+    const apiKey = "9be29dde5932444fb00536722827a414";
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Phosphor-Api-Key': `${apiKey}`
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Fetched transaction details:', result);
+    } catch (error) {
+      console.error('Failed to fetch transaction details:', error);
+    }
+  };
 
 
   const fetchCollections = async () => {
@@ -407,6 +435,15 @@ function App() {
         <button onClick={createItem}>create item</button>
         <button onClick={lockItem}>lock item</button>
         <button onClick={mintRequest}>mint item</button>
+        <div>
+          <input
+            type="text"
+            value={transactionId}
+            onChange={(e) => setTransactionId(e.target.value)}
+            placeholder="Enter Transaction ID"
+          />
+          <button onClick={getTransactionDetails}>Get Transaction Details</button>
+        </div>
         <button onClick={getMintRequest}>get mint request</button>
       </div>
 
