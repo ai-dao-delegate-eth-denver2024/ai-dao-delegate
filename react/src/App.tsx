@@ -68,6 +68,7 @@ function App() {
           return contract.submitData(inputObject.value);
         }}
       />
+      Follow @kirill_igum
     </>
   )
 }
