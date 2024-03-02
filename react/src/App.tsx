@@ -27,6 +27,10 @@ function App() {
   const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64");
 
   const [transactionId, setTransactionId] = useState('');
+  const [collectionId, setCollectionId] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [collectionResult, setCollectionResult] = useState(null);
   const [showCollectionResult, setShowCollectionResult] = useState(false);
   const getTransactionDetails = async () => {
@@ -164,16 +168,16 @@ function App() {
     }
   };
 
-  const createItem = async () => {
+  const createItemWithDetails = async (collectionId, title, description, imageUrl) => {
     const url = 'https://admin-api.phosphor.xyz/v1/items';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
     const apiKey = "9be29dde5932444fb00536722827a414";
     const data = {
-      "collection_id": "42b6b890-e326-4980-b42d-a6f4c895014c",
+      "collection_id": collectionId,
       "attributes": {
-        "title": "item-title",
-        "description": "item-description",
-        "image_url": "https://en.wikipedia.org/wiki/Main_Page#/media/File:King-Edward-VII_(cropped).jpg",
+        "title": title,
+        "description": description,
+        "image_url": imageUrl,
       },
       "item_type_id": null,
     };
@@ -457,7 +461,29 @@ function App() {
           <button onClick={() => createCollection()}>Create Collection</button>
         </div>
         <button onClick={fetchCollections}>Fetch Collection</button>
-        <button onClick={createItem}>create item</button>
+        <div>
+          <input
+            type="text"
+            placeholder="Collection ID"
+            onChange={(e) => setCollectionId(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
+          <button onClick={() => createItemWithDetails(collectionId, title, description, imageUrl)}>Submit Item</button>
+        </div>
         <button onClick={lockItem}>lock item</button>
         <button onClick={mintRequest}>mint item</button>
         <div>
