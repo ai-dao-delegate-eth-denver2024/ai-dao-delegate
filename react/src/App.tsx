@@ -68,6 +68,25 @@ function App() {
           return contract.submitData(inputObject.value);
         }}
       />
+      <InteractionForm
+        description="Get Submission"
+        defaultInputs={[{ name: "submissionId", value: "", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          const submissionId = ethers.BigNumber.from(inputObject.value);
+          const result = await contract.getSubmission(submissionId);
+          return JSON.stringify({
+            author: result.author,
+            data: result.data,
+            selectedReviewers: result.selectedReviewers,
+            shuffledReviewers: result.shuffledReviewers,
+            isApproved: result.isApproved,
+            seed: result.seed.toString(),
+            countVotes: result.countVotes.toString()
+          }, null, 2);
+        }}
+        isReadCall={true}
+      />
       Follow @kirill_igum
     </>
   )
