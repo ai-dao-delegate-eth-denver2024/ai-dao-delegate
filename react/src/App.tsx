@@ -447,6 +447,23 @@ function App() {
         <button onClick={getMintRequest}>get mint request</button>
       </div>
 
+      <button onClick={async () => {
+        try {
+          const SCHEMA = {
+            // Assuming SCHEMA is defined elsewhere or provided as a constant
+            // Add the SCHEMA object definition here as per your application's requirements
+          };
+          const txHash = await veraxSdk.schema.create(
+            "Tutorial Schema",
+            "This Schema is used for the tutorial",
+            "https://ver.ax/#/tutorials",
+            SCHEMA,
+          );
+          console.log('Transaction Hash:', txHash);
+        } catch (error) {
+          console.error('Error creating schema:', error);
+        }
+      }}>Create Tutorial Schema</button>
       Follow @kirill_igum
     </>
   )
