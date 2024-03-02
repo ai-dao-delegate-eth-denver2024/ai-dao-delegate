@@ -46,6 +46,7 @@ contract PeerReview {
         ROI_DENOMINATOR = _roiDenominator;
         owner = msg.sender;
         options = ["Yes", "No"];
+        totalAcceptVotesFhe = TFHE.asEuint32(0x00);
     }
 
     // Function to add an author, only callable by the owner
@@ -244,15 +245,6 @@ contract PeerReview {
         return seed;
     }
 
-    // Function to get the approval status of a submission by its ID
-    function getIsApproved(uint256 submissionId) public view returns (bool) {
-        require(
-            submissionId < submissions.length,
-            "Submission does not exist."
-        );
-        return submissions[submissionId].isApproved;
-    }
-
     // Temporary structure to hold reviewer counts
     struct ReviewerCount {
         address reviewer;
@@ -313,7 +305,7 @@ contract PeerReview {
         if (vote == 1) {
             totalAcceptVotes += 1;
         }
-        submissions[0].countVotes += 1; // Increment countVotes for the submission
+        submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
     }
 
     // Modified to allow revealing votes only if countVotes is 3 for a specific submission
@@ -322,17 +314,16 @@ contract PeerReview {
             submissions[submissionId].countVotes == 3,
             "Votes can only be revealed if countVotes is 3."
         );
-        submissions[0].isApproved = (totalAcceptVotes == 3);
+        submissions[submissionId].isApproved = (totalAcceptVotes == 3);
     }
 
-    //FHE voting
     function reviewerVoteFhe(uint32 vote, uint256 submissionId) public {
         require(submissionId < submissions.length, "Invalid submission ID");
         require(
             submissions[submissionId].countVotes < 3,
             "Vote limit reached for this submission."
         );
-        ebool maybetrue = TFHE.eq(vote, TFHE.asEuint32(0x01));
+        ebool maybetrue = TFHE.eq(TFHE.asEuint32(vote), TFHE.asEuint32(0x01));
         totalAcceptVotesFhe = TFHE.cmux(
             maybetrue,
             TFHE.add(totalAcceptVotesFhe, TFHE.asEuint32(0x01)),
@@ -341,16 +332,22 @@ contract PeerReview {
         submissions[submissionId].countVotes += 1; // Increment countVotes for the submission
     }
 
-    function revealVotesFhe(uint256 submissionId) public view returns (bool) {
+    function revealVotesFhe(uint256 submissionId) public {
         require(
-            submissions[submissionId].countVotes == 2,
+            submissions[submissionId].countVotes == 3,
             "Votes can only be revealed if countVotes is 3."
         );
-        ebool condition = TFHE.eq(totalAcceptVotesFhe, TFHE.asEuint32(0x02));
-        if (TFHE.decrypt(condition)) {
-            return true;
-        }
-        return false;
+        ebool condition = TFHE.eq(totalAcceptVotesFhe, TFHE.asEuint32(0x03));
+        submissions[submissionId].isApproved = TFHE.decrypt(condition);
+    }
+
+    // Afunction to view isApproved status of a submission
+    function getIsApproved(uint256 submissionId) public view returns (bool) {
+        require(
+            submissionId < submissions.length,
+            "Submission does not exist."
+        );
+        return submissions[submissionId].isApproved;
     }
 
     // // https://docs.inco.org/getting-started/example-dapps/private-voting
