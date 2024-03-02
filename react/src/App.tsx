@@ -238,7 +238,8 @@ function App() {
       }
 
       const result = await response.json();
-      console.log('Collection created:', result);
+      console.log('Mint request submitted:', result);
+      setMintResult(result); // Store the mint result
       // Handle success
     } catch (error) {
       console.error('Failed to create collection:', error);
@@ -246,7 +247,12 @@ function App() {
     }
   };
 
-  const mintRequest = async () => {
+  const [toAddress, setToAddress] = useState('');
+  const [itemId, setItemId] = useState('');
+  const [mintResult, setMintResult] = useState(null);
+  const [showMintResult, setShowMintResult] = useState(false);
+
+  const mintRequest = async (toAddress, itemId) => {
     const url = 'https://admin-api.phosphor.xyz/v1/mint-requests';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
     const apiKey = "9be29dde5932444fb00536722827a414";
@@ -504,7 +510,22 @@ function App() {
             {showLockItemResult ? 'Hide Lock Item Result' : 'Show Lock Item Result'}
           </button>
         </div>
-        <button onClick={mintRequest}>mint item</button>
+        <div>
+          <input
+            type="text"
+            placeholder="To Address"
+            onChange={(e) => setToAddress(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Item ID"
+            onChange={(e) => setItemId(e.target.value)}
+          />
+          <button onClick={() => mintRequest(toAddress, itemId)}>Submit Mint Request</button>
+        </div>
+        <button onClick={() => setShowMintResult(!showMintResult)}>
+          {showMintResult ? 'Hide Mint Result' : 'Show Mint Result'}
+        </button>
         <div>
           <input
             type="text"
@@ -529,6 +550,12 @@ function App() {
           <div>
             <h3>Lock Item Result:</h3>
             <pre>{JSON.stringify(lockItemResult, null, 2)}</pre>
+          </div>
+        )}
+        {showMintResult && mintResult && (
+          <div>
+            <h3>Mint Result:</h3>
+            <pre>{JSON.stringify(mintResult, null, 2)}</pre>
           </div>
         )}
         {itemResult.imageUrl && itemResult.description && (
