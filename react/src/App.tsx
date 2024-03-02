@@ -16,7 +16,8 @@ function App() {
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
   const createCollection = async () => {
     const url = 'https://admin-api.phosphor.xyz/v1/collections';
-    const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
+    // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
+    const apiKey = "9be29dde5932444fb00536722827a414"
 
     const data = {
       "name": "Collection ABC",
@@ -41,7 +42,7 @@ function App() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}` // Using the API key
+          'Phosphor-Api-Key': `${apiKey}` // Using the API key
         },
         body: JSON.stringify(data),
       });
