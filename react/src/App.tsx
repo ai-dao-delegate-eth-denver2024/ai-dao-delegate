@@ -70,10 +70,10 @@ function App() {
       />
       <InteractionForm
         description="Get Submission"
-        defaultInputs={[{ name: "submissionId", value: "", description: "Submission ID" }]}
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
         contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          const submissionId = ethers.BigNumber.from(inputObject.value);
+          const submissionId = inputObject.value;
           const result = await contract.getSubmission(submissionId);
           return JSON.stringify({
             author: result.author,
