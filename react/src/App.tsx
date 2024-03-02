@@ -16,13 +16,16 @@ interface IInputField {
 
 function App() {
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const address = await signer.getAddress();
-  const network = await provider.getNetwork();
-  const chainId = network.chainId;
-  const sdkConf = chainId === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
-  const veraxSdk = new VeraxSdk(sdkConf, address);
+  // const provider = new ethers.BrowserProvider(window.ethereum);
+  // const signer = provider.getSigner();
+  // const address = signer.getAddress();
+  // const network = provider.getNetwork();
+  // const chainId = network.chainId;
+  // const sdkConf = chainId === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
+  // const veraxSdk = new VeraxSdk(sdkConf, address);
+  const sdkConf =  VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
+  const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64" );
+
 
   const fetchCollections = async () => {
     const url = 'https://admin-api.phosphor.xyz/v1/collections';
@@ -400,6 +403,7 @@ function App() {
       />
       <div>
         <button onClick={createCollection}>Create Collection</button>
+        <button onClick={fetchCollections}>Fetch Collection</button>
         <button onClick={createItem}>create item</button>
         <button onClick={lockItem}>lock item</button>
         <button onClick={mintRequest}>mint item</button>
