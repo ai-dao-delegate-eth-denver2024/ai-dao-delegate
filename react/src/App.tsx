@@ -344,6 +344,122 @@ function App() {
               return contract.submitData(inputObject.value);
             }}
           />
+          <InteractionForm
+            description="Check if Submission is Approved"
+            defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+            contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+              const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+              return contract.getIsApproved(inputObject.value);
+            }}
+            isReadCall={true}
+          />
+          <div>
+            <h3>mint NFT</h3>
+            <div>
+              <input
+                type="text"
+                placeholder="Collection Name"
+                onChange={(e) => setCollectionName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Symbol"
+                onChange={(e) => setCollectionSymbol(e.target.value)}
+              />
+              <button onClick={() => createCollection()}>Create Collection</button>
+            </div>
+            <button onClick={fetchCollections}>Fetch Collection</button>
+            <div>
+              <input
+                type="text"
+                placeholder="Collection ID"
+                onChange={(e) => setCollectionId(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Title"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Description"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Image URL"
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
+              <button onClick={() => createItemWithDetails(collectionId, title, description, imageUrl)}>Submit Item</button>
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Collection ID"
+                onChange={(e) => setLockCollectionId(e.target.value)}
+              />
+              <button onClick={() => lockItem(lockCollectionId)}>Lock Item</button>
+              <button onClick={() => setShowLockItemResult(!showLockItemResult)}>
+                {showLockItemResult ? 'Hide Lock Item Result' : 'Show Lock Item Result'}
+              </button>
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="To Address"
+                onChange={(e) => setToAddress(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Item ID"
+                onChange={(e) => setItemId(e.target.value)}
+              />
+              <button onClick={() => mintRequest(toAddress, itemId)}>Submit Mint Request</button>
+            </div>
+            <button onClick={() => setShowMintResult(!showMintResult)}>
+              {showMintResult ? 'Hide Mint Result' : 'Show Mint Result'}
+            </button>
+            <div>
+              <input
+                type="text"
+                value={transactionId}
+                onChange={(e) => setTransactionId(e.target.value)}
+                placeholder="Enter Transaction ID"
+              />
+              <button onClick={getTransactionDetails}>Get Transaction Details</button>
+            </div>
+            <button onClick={getMintRequest}>get mint request</button>
+            <button onClick={() => setShowCollectionResult(!showCollectionResult)}>
+              {showCollectionResult ? 'Hide' : 'Show'} Collection Result
+            </button>
+            {showCollectionResult && collectionResult && (
+              <div>
+                <h3>Collection Creation Result:</h3>
+                <h4>Collection ID: {collectionResult.id}</h4>
+                <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
+              </div>
+            )}
+            {showLockItemResult && lockItemResult && (
+              <div>
+                <h3>Lock Item Result:</h3>
+                <pre>{JSON.stringify(lockItemResult, null, 2)}</pre>
+              </div>
+            )}
+            {showMintResult && mintResult && (
+              <div>
+                <h3>Mint Result:</h3>
+                <pre>{JSON.stringify(mintResult, null, 2)}</pre>
+              </div>
+            )}
+            {itemResult.imageUrl && itemResult.description && (
+              <div>
+                <h3>Submitted Item Details:</h3>
+                <p>Title: {itemResult.title}</p>
+                <p>Description: {itemResult.description}</p>
+                <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
+              </div>
+            )}
+          </div>
         </>
       )}
       {activeTab === 'reviewers' && (
@@ -372,31 +488,42 @@ function App() {
           />
         </>
       )}
+      <br />
+      <InteractionForm
+        description="Assign Random Seed to Submission"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.assignRandomSeedToSubmission(inputObject.value);
+        }}
+      />
+      <InteractionForm
+        description="Shuffle Reviewers"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.shuffleReviewers(inputObject.value);
+        }}
+      />
+      <InteractionForm
+        description="Find Top Reviewers for Submission"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.findTopReviewersForSubmission(inputObject.value);
+        }}
+      />
+      <InteractionForm
+        description="Reveal Votes"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.revealVotes(inputObject.value);
+        }}
+      />
 
-      <InteractionForm
-        description="add reviewer"
-        defaultInputs={[
-          { name: "reviewer", value: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", description: "reviewer" },
-          { name: "keywords", value: "dao", description: "keywords" }
-        ]}
-        contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          // Split the keywords string by comma to create an array, trimming whitespace from each keyword
-          const keywordsArray = inputObject2.value.split(',').map(keyword => keyword.trim());
-          return contract.addReviewer(inputObject1.value, keywordsArray);
-        }}
-      />
-      <InteractionForm
-        description="Add Keyword to Reviewer"
-        defaultInputs={[
-          { name: "reviewerIndex", value: "0", description: "Reviewer Index" },
-          { name: "newKeyword", value: "", description: "New Keyword" }
-        ]}
-        contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.addKeywordToReviewer(inputObject1.value, inputObject2.value);
-        }}
-      />
+      <br />
+
       <InteractionForm
         description="Get Reviewers"
         defaultInputs={[]}
@@ -414,14 +541,6 @@ function App() {
           return contract.getReviewerKeywords(inputObject.value);
         }}
         isReadCall={true}
-      />
-      <InteractionForm
-        description="Submit Data"
-        defaultInputs={[{ name: "data", value: "write some really clever text in the form of instruction and response.", description: "Data to submit" }]}
-        contractFunction={(signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.submitData(inputObject.value);
-        }}
       />
       <InteractionForm
         description="Get Submission"
@@ -443,22 +562,6 @@ function App() {
         isReadCall={true}
       />
       <InteractionForm
-        description="Assign Random Seed to Submission"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.assignRandomSeedToSubmission(inputObject.value);
-        }}
-      />
-      <InteractionForm
-        description="Shuffle Reviewers"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.shuffleReviewers(inputObject.value);
-        }}
-      />
-      <InteractionForm
         description="Get Shuffled Reviewers"
         defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
         contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
@@ -466,14 +569,6 @@ function App() {
           return contract.getShuffledReviewers(inputObject.value);
         }}
         isReadCall={true}
-      />
-      <InteractionForm
-        description="Find Top Reviewers for Submission"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.findTopReviewersForSubmission(inputObject.value);
-        }}
       />
       <InteractionForm
         description="Get Selected Reviewers"
@@ -484,140 +579,6 @@ function App() {
         }}
         isReadCall={true}
       />
-      <InteractionForm
-        description="Reviewer Vote"
-        defaultInputs={[
-          { name: "submissionId", value: "0", description: "Submission ID" },
-          { name: "vote", value: "1", description: "Vote (1 for accept, 0 for reject)" }
-        ]}
-        contractFunction={async (signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.reviewerVote(inputObject2.value, inputObject1.value);
-        }}
-      />
-      <InteractionForm
-        description="Reveal Votes"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.revealVotes(inputObject.value);
-        }}
-      />
-      <InteractionForm
-        description="Check if Submission is Approved"
-        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getIsApproved(inputObject.value);
-        }}
-        isReadCall={true}
-      />
-      <div>
-        <div>
-          <input
-            type="text"
-            placeholder="Collection Name"
-            onChange={(e) => setCollectionName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Symbol"
-            onChange={(e) => setCollectionSymbol(e.target.value)}
-          />
-          <button onClick={() => createCollection()}>Create Collection</button>
-        </div>
-        <button onClick={fetchCollections}>Fetch Collection</button>
-        <div>
-          <input
-            type="text"
-            placeholder="Collection ID"
-            onChange={(e) => setCollectionId(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Title"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Image URL"
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          <button onClick={() => createItemWithDetails(collectionId, title, description, imageUrl)}>Submit Item</button>
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Collection ID"
-            onChange={(e) => setLockCollectionId(e.target.value)}
-          />
-          <button onClick={() => lockItem(lockCollectionId)}>Lock Item</button>
-          <button onClick={() => setShowLockItemResult(!showLockItemResult)}>
-            {showLockItemResult ? 'Hide Lock Item Result' : 'Show Lock Item Result'}
-          </button>
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="To Address"
-            onChange={(e) => setToAddress(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Item ID"
-            onChange={(e) => setItemId(e.target.value)}
-          />
-          <button onClick={() => mintRequest(toAddress, itemId)}>Submit Mint Request</button>
-        </div>
-        <button onClick={() => setShowMintResult(!showMintResult)}>
-          {showMintResult ? 'Hide Mint Result' : 'Show Mint Result'}
-        </button>
-        <div>
-          <input
-            type="text"
-            value={transactionId}
-            onChange={(e) => setTransactionId(e.target.value)}
-            placeholder="Enter Transaction ID"
-          />
-          <button onClick={getTransactionDetails}>Get Transaction Details</button>
-        </div>
-        <button onClick={getMintRequest}>get mint request</button>
-        <button onClick={() => setShowCollectionResult(!showCollectionResult)}>
-          {showCollectionResult ? 'Hide' : 'Show'} Collection Result
-        </button>
-        {showCollectionResult && collectionResult && (
-          <div>
-            <h3>Collection Creation Result:</h3>
-            <h4>Collection ID: {collectionResult.id}</h4>
-            <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
-          </div>
-        )}
-        {showLockItemResult && lockItemResult && (
-          <div>
-            <h3>Lock Item Result:</h3>
-            <pre>{JSON.stringify(lockItemResult, null, 2)}</pre>
-          </div>
-        )}
-        {showMintResult && mintResult && (
-          <div>
-            <h3>Mint Result:</h3>
-            <pre>{JSON.stringify(mintResult, null, 2)}</pre>
-          </div>
-        )}
-        {itemResult.imageUrl && itemResult.description && (
-          <div>
-            <h3>Submitted Item Details:</h3>
-            <p>Title: {itemResult.title}</p>
-            <p>Description: {itemResult.description}</p>
-            <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
-          </div>
-        )}
-      </div>
       {/* <InteractionForm */}
       {/*   description="Check if Submission is Approved" */}
       {/*   defaultInputs={[{ name: "tokenId", value: "0", description: "tokenId" }]} */}
