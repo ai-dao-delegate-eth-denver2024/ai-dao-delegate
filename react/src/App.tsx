@@ -14,6 +14,39 @@ interface IInputField {
 
 function App() {
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
+  const createCollection = async () => {
+    const url = 'https://admin-api.phosphor.xyz/v1/collections'; // This is a placeholder URL; replace it with the actual API endpoint
+    const apiKey = '9be29dde5932444fb00536722827a414'; // Replace with your actual API key
+
+    const data = {
+      name: "My Collection", // Set the collection name
+      description: "A description of my collection", // Set the collection description
+      // Include other necessary fields as specified in the documentation
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}` // Assuming the API uses Bearer token authentication
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Collection created:', result);
+      // Handle success (e.g., display a message or update UI)
+    } catch (error) {
+      console.error('Failed to create collection:', error);
+      // Handle error (e.g., display error message)
+    }
+  };
+
 
   return (
     <>
@@ -189,6 +222,7 @@ function App() {
         }}
         isReadCall={true}
       />
+      <button onClick={createCollection}>Create Collection</button>
       Follow @kirill_igum
     </>
   )
