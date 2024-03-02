@@ -27,6 +27,8 @@ function App() {
   const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64");
 
   const [transactionId, setTransactionId] = useState('');
+  const [collectionResult, setCollectionResult] = useState(null);
+  const [showCollectionResult, setShowCollectionResult] = useState(false);
   const getTransactionDetails = async () => {
     if (!transactionId) {
       alert('Please enter a transaction ID');
@@ -153,6 +155,8 @@ function App() {
 
       const result = await response.json();
       console.log('Collection created:', result);
+      setCollectionResult(result);
+      setShowCollectionResult(true); // Automatically show the result upon creation
       // Handle success
     } catch (error) {
       console.error('Failed to create collection:', error);
@@ -466,6 +470,15 @@ function App() {
           <button onClick={getTransactionDetails}>Get Transaction Details</button>
         </div>
         <button onClick={getMintRequest}>get mint request</button>
+        <button onClick={() => setShowCollectionResult(!showCollectionResult)}>
+          {showCollectionResult ? 'Hide' : 'Show'} Collection Result
+        </button>
+        {showCollectionResult && collectionResult && (
+          <div>
+            <h3>Collection Creation Result:</h3>
+            <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
+          </div>
+        )}
       </div>
       {/* <InteractionForm */}
       {/*   description="Check if Submission is Approved" */}
