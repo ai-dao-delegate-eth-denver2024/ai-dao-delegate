@@ -362,101 +362,101 @@ function App() {
               <>
                 <h3>mint NFT</h3>
                 <div>
-              <input
-                type="text"
-                placeholder="Collection Name"
-                onChange={(e) => setCollectionName(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Symbol"
-                onChange={(e) => setCollectionSymbol(e.target.value)}
-              />
-              <button onClick={() => createCollection()}>Create Collection</button>
-            </div>
-            <button onClick={fetchCollections}>Fetch Collection</button>
-            <div>
-              <input
-                type="text"
-                placeholder="Collection ID"
-                onChange={(e) => setCollectionId(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Title"
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Description"
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Image URL"
-                onChange={(e) => setImageUrl(e.target.value)}
-              />
-              <button onClick={() => createItemWithDetails(collectionId, title, description, imageUrl)}>Submit Item</button>
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="Collection ID"
-                onChange={(e) => setLockCollectionId(e.target.value)}
-              />
-              <button onClick={() => lockItem(lockCollectionId)}>Lock Item</button>
-              <button onClick={() => setShowLockItemResult(!showLockItemResult)}>
-                {showLockItemResult ? 'Hide Lock Item Result' : 'Show Lock Item Result'}
-              </button>
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="To Address"
-                onChange={(e) => setToAddress(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Item ID"
-                onChange={(e) => setItemId(e.target.value)}
-              />
-              <button onClick={() => mintRequest(toAddress, itemId)}>Submit Mint Request</button>
-            </div>
-            <button onClick={() => setShowMintResult(!showMintResult)}>
-              {showMintResult ? 'Hide Mint Result' : 'Show Mint Result'}
-            </button>
-            <div>
-              <input
-                type="text"
-                value={transactionId}
-                onChange={(e) => setTransactionId(e.target.value)}
-                placeholder="Enter Transaction ID"
-              />
-              <button onClick={getTransactionDetails}>Get Transaction Details</button>
-            </div>
-            <button onClick={getMintRequest}>get mint request</button>
-            <button onClick={() => setShowCollectionResult(!showCollectionResult)}>
-              {showCollectionResult ? 'Hide' : 'Show'} Collection Result
-            </button>
-            {showCollectionResult && collectionResult && (
-              <div>
-                <h3>Collection Creation Result:</h3>
-                <h4>Collection ID: {collectionResult.id}</h4>
-                <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
-              </div>
-            )}
-            {showLockItemResult && lockItemResult && (
-              <div>
-                <h3>Lock Item Result:</h3>
-                <pre>{JSON.stringify(lockItemResult, null, 2)}</pre>
-              </div>
-            )}
-            {showMintResult && mintResult && (
-              <div>
-                <h3>Mint Result:</h3>
-                <pre>{JSON.stringify(mintResult, null, 2)}</pre>
-              </div>
-            )}
+                  <input
+                    type="text"
+                    placeholder="Collection Name"
+                    onChange={(e) => setCollectionName(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Symbol"
+                    onChange={(e) => setCollectionSymbol(e.target.value)}
+                  />
+                  <button onClick={() => createCollection()}>Create Collection</button>
+                </div>
+                <button onClick={fetchCollections}>Fetch Collection</button>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Collection ID"
+                    onChange={(e) => setCollectionId(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Description"
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Image URL"
+                    onChange={(e) => setImageUrl(e.target.value)}
+                  />
+                  <button onClick={() => createItemWithDetails(collectionId, title, description, imageUrl)}>Submit Item</button>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Collection ID"
+                    onChange={(e) => setLockCollectionId(e.target.value)}
+                  />
+                  <button onClick={() => lockItem(lockCollectionId)}>Lock Item</button>
+                  <button onClick={() => setShowLockItemResult(!showLockItemResult)}>
+                    {showLockItemResult ? 'Hide Lock Item Result' : 'Show Lock Item Result'}
+                  </button>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="To Address"
+                    onChange={(e) => setToAddress(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Item ID"
+                    onChange={(e) => setItemId(e.target.value)}
+                  />
+                  <button onClick={() => mintRequest(toAddress, itemId)}>Submit Mint Request</button>
+                </div>
+                <button onClick={() => setShowMintResult(!showMintResult)}>
+                  {showMintResult ? 'Hide Mint Result' : 'Show Mint Result'}
+                </button>
+                <div>
+                  <input
+                    type="text"
+                    value={transactionId}
+                    onChange={(e) => setTransactionId(e.target.value)}
+                    placeholder="Enter Transaction ID"
+                  />
+                  <button onClick={getTransactionDetails}>Get Transaction Details</button>
+                </div>
+                <button onClick={getMintRequest}>get mint request</button>
+                <button onClick={() => setShowCollectionResult(!showCollectionResult)}>
+                  {showCollectionResult ? 'Hide' : 'Show'} Collection Result
+                </button>
+                {showCollectionResult && collectionResult && (
+                  <div>
+                    <h3>Collection Creation Result:</h3>
+                    <h4>Collection ID: {collectionResult.id}</h4>
+                    <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
+                  </div>
+                )}
+                {showLockItemResult && lockItemResult && (
+                  <div>
+                    <h3>Lock Item Result:</h3>
+                    <pre>{JSON.stringify(lockItemResult, null, 2)}</pre>
+                  </div>
+                )}
+                {showMintResult && mintResult && (
+                  <div>
+                    <h3>Mint Result:</h3>
+                    <pre>{JSON.stringify(mintResult, null, 2)}</pre>
+                  </div>
+                )}
                 {itemResult.imageUrl && itemResult.description && (
                   <div>
                     <h3>Submitted Item Details:</h3>
@@ -497,6 +497,8 @@ function App() {
         </>
       )}
       <br />
+      <h3>Peer review steps</h3>
+      <p>anyone can do these steps</p>
       <InteractionForm
         description="Assign Random Seed to Submission"
         defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
@@ -532,6 +534,7 @@ function App() {
 
       <br />
 
+      <h3>see what is on-chain</h3>
       <InteractionForm
         description="Get Reviewers"
         defaultInputs={[]}
@@ -587,15 +590,7 @@ function App() {
         }}
         isReadCall={true}
       />
-      {/* <InteractionForm */}
-      {/*   description="Check if Submission is Approved" */}
-      {/*   defaultInputs={[{ name: "tokenId", value: "0", description: "tokenId" }]} */}
-      {/*   contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => { */}
-      {/*     const contract = new ethers.Contract("0x27d73839Cc465Cc3Bd380362b4013FE7c184690D", PeerReviewAbi, signer); */}
-      {/*     return contract.getIsApproved(inputObject.value); */}
-      {/*   }} */}
-      {/*   isReadCall={true} */}
-      {/* /> */}
+      <br />
 
       <button onClick={async () => {
         const SCHEMA = '(bool hasCompletedTutoriall)';
