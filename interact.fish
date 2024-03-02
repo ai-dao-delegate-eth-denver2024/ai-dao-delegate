@@ -1,4 +1,4 @@
-set rpc_url https://linea-goerli.infura.io/v3/
+set rpc_url https://linea-goerli.infura.io/v3/2VqSICfz9lbTcfjmNqvNYRhgiWX
 set owner_addr 0x5873298b68497fad590f68221D9a8d134902DE64
 set author_addr 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 set reviewer1_addr 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
