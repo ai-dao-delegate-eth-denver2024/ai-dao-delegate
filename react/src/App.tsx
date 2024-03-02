@@ -501,7 +501,7 @@ function App() {
       <h3>Peer review steps</h3>
       <p>anyone can do these steps</p>
       <InteractionForm
-        description="Assign Random Seed to Submission"
+        description="Assign Random Seed"
         defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
         contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
@@ -517,7 +517,7 @@ function App() {
         }}
       />
       <InteractionForm
-        description="Find Top Reviewers for Submission"
+        description="Find Top Reviewers"
         defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
         contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
@@ -536,11 +536,10 @@ function App() {
       <br />
 
       <button onClick={() => setShowOnChainSection(!showOnChainSection)}>
-        {showOnChainSection ? 'Hide On-Chain Section' : 'Show On-Chain Section'}
+        {showOnChainSection ? 'Hide On-Chain Section' : 'See What is On-Chain'}
       </button>
       {showOnChainSection && (
         <>
-          <h3>see what is on-chain</h3>
           <InteractionForm
             description="Get Reviewers"
             defaultInputs={[]}
@@ -596,9 +595,9 @@ function App() {
             }}
             isReadCall={true}
           />
-          <br />
         </>
       )}
+      <br />
 
       <button onClick={async () => {
         const SCHEMA = '(bool hasCompletedTutoriall)';
@@ -614,6 +613,7 @@ function App() {
           console.error('Error creating schema:', error);
         }
       }}>Create Tutorial Schema</button>
+      <br />
       Follow @kirill_igum
     </>
   )
