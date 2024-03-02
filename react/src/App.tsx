@@ -211,12 +211,13 @@ function App() {
   };
 
 
-  const lockItem = async () => {
+  const [lockCollectionId, setLockCollectionId] = useState('');
+  const lockItem = async (collectionId) => {
     const url = 'https://admin-api.phosphor.xyz/v1/items/lock';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
     const apiKey = "9be29dde5932444fb00536722827a414";
     const data = {
-      "collection_id": "42b6b890-e326-4980-b42d-a6f4c895014c"
+      "collection_id": collectionId
     };
 
     try {
@@ -489,7 +490,14 @@ function App() {
           />
           <button onClick={() => createItemWithDetails(collectionId, title, description, imageUrl)}>Submit Item</button>
         </div>
-        <button onClick={lockItem}>lock item</button>
+        <div>
+          <input
+            type="text"
+            placeholder="Collection ID"
+            onChange={(e) => setLockCollectionId(e.target.value)}
+          />
+          <button onClick={() => lockItem(lockCollectionId)}>Lock Item</button>
+        </div>
         <button onClick={mintRequest}>mint item</button>
         <div>
           <input
