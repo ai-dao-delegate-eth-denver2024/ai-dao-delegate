@@ -17,10 +17,10 @@ function App() {
   const createCollection = async () => {
     const url = 'https://admin-api.phosphor.xyz/v1/collections';
     // const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
-    const apiKey = "9be29dde5932444fb00536722827a414"
+    const apiKey = "9be29dde5932444fb00536722827a414";
 
     const data = {
-      "name": "Collection ABC",
+      "name": "Collection ABC2",
       "default_item_type_id": null,
       "image_url": null,
       "reveal_strategy": "INSTANT",
@@ -236,25 +236,6 @@ function App() {
         isReadCall={true}
       />
       <button onClick={createCollection}>Create Collection</button>
-
-      <button onClick={async () => {
-        try {
-          const response = await fetch('https://admin-api.phosphor.xyz/v1/collections?limit=1', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              // Include any required headers here
-            },
-          });
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-          }
-          const result = await response.json();
-          console.log('Fetched collection:', result);
-        } catch (error) {
-          console.error('Failed to fetch collection:', error);
-        }
-      }}>Fetch Collection</button>
 
       Follow @kirill_igum
     </>
