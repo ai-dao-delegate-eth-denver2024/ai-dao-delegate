@@ -89,6 +89,17 @@ function App() {
         }}
         isReadCall={true}
       />
+      <InteractionForm
+        description="Add Keyword to Reviewer"
+        defaultInputs={[
+          { name: "reviewerIndex", value: "", description: "Reviewer Index" },
+          { name: "newKeyword", value: "", description: "New Keyword" }
+        ]}
+        contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.addKeywordToReviewer(inputObject1.value, inputObject2.value);
+        }}
+      />
       Follow @kirill_igum
     </>
   )
