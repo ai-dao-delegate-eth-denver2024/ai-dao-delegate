@@ -511,12 +511,14 @@ function App() {
             <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
           </div>
         )}
-        <div>
-          <h3>Submitted Item Details:</h3>
-          <p>Title: {itemResult.title}</p>
-          <p>Description: {itemResult.description}</p>
-          <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
-        </div>
+        {itemResult.imageUrl && itemResult.description && (
+          <div>
+            <h3>Submitted Item Details:</h3>
+            <p>Title: {itemResult.title}</p>
+            <p>Description: {itemResult.description}</p>
+            <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
+          </div>
+        )}
       </div>
       {/* <InteractionForm */}
       {/*   description="Check if Submission is Approved" */}
