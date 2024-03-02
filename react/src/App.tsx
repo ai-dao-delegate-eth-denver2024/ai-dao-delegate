@@ -100,6 +100,15 @@ function App() {
           return contract.addKeywordToReviewer(inputObject1.value, inputObject2.value);
         }}
       />
+      <InteractionForm
+        description="Get Selected Reviewers"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.getSelectedReviewers(inputObject.value);
+        }}
+        isReadCall={true}
+      />
       Follow @kirill_igum
     </>
   )
