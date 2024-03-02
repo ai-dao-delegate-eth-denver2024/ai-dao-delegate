@@ -252,6 +252,7 @@ function App() {
   const [itemId, setItemId] = useState('');
   const [mintResult, setMintResult] = useState(null);
   const [showMintResult, setShowMintResult] = useState(false);
+  const [showMintNFTSection, setShowMintNFTSection] = useState(false);
 
   const mintRequest = async (toAddress, itemId) => {
     const url = 'https://admin-api.phosphor.xyz/v1/mint-requests';
@@ -354,8 +355,13 @@ function App() {
             isReadCall={true}
           />
           <div>
-            <h3>mint NFT</h3>
-            <div>
+            <button onClick={() => setShowMintNFTSection(!showMintNFTSection)}>
+              {showMintNFTSection ? 'Hide Mint NFT Section' : 'Show Mint NFT Section'}
+            </button>
+            {showMintNFTSection && (
+              <>
+                <h3>mint NFT</h3>
+                <div>
               <input
                 type="text"
                 placeholder="Collection Name"
@@ -451,13 +457,15 @@ function App() {
                 <pre>{JSON.stringify(mintResult, null, 2)}</pre>
               </div>
             )}
-            {itemResult.imageUrl && itemResult.description && (
-              <div>
-                <h3>Submitted Item Details:</h3>
-                <p>Title: {itemResult.title}</p>
-                <p>Description: {itemResult.description}</p>
-                <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
-              </div>
+                {itemResult.imageUrl && itemResult.description && (
+                  <div>
+                    <h3>Submitted Item Details:</h3>
+                    <p>Title: {itemResult.title}</p>
+                    <p>Description: {itemResult.description}</p>
+                    <img src={itemResult.imageUrl} alt="Submitted Item" style={{ maxWidth: '200px' }} />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </>
