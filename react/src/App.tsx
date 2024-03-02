@@ -430,7 +430,19 @@ function App() {
         isReadCall={true}
       />
       <div>
-        <button onClick={createCollection}>Create Collection</button>
+        <div>
+          <input
+            type="text"
+            placeholder="Collection Name"
+            onChange={(e) => setCollectionName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Symbol"
+            onChange={(e) => setCollectionSymbol(e.target.value)}
+          />
+          <button onClick={() => createCollection(collectionName, collectionSymbol)}>Create Collection</button>
+        </div>
         <button onClick={fetchCollections}>Fetch Collection</button>
         <button onClick={createItem}>create item</button>
         <button onClick={lockItem}>lock item</button>
