@@ -27,11 +27,11 @@ function App() {
   const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64");
 
   const [transactionId, setTransactionId] = useState('');
-  const [collectionId, setCollectionId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [collectionResult, setCollectionResult] = useState(null);
+  const [collectionId, setCollectionId] = useState('');
   const [showCollectionResult, setShowCollectionResult] = useState(false);
   const getTransactionDetails = async () => {
     if (!transactionId) {
@@ -160,6 +160,7 @@ function App() {
       const result = await response.json();
       console.log('Collection created:', result);
       setCollectionResult(result);
+      setCollectionId(result.id);
       // setShowCollectionResult(true); // Automatically show the result upon creation
       // Handle success
     } catch (error) {
@@ -502,6 +503,7 @@ function App() {
         {showCollectionResult && collectionResult && (
           <div>
             <h3>Collection Creation Result:</h3>
+            <h4>Collection ID: {collectionResult.id}</h4>
             <pre>{JSON.stringify(collectionResult, null, 2)}</pre>
           </div>
         )}
