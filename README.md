@@ -1,76 +1,54 @@
 # peer tunning ai
 
-## deployed
+## contract deployed
 
-inco: https://explorer.testnet.inco.org/address/0x70abFFA49E84860F06E91c7809D0D87B73166f25
-Linea Goerli:
-XDC:
+### Linea Goerli:
+uses Phosphor and Verax
+### inco:
+uses full homomorphic encryption for private voting
+https://explorer.testnet.inco.org/address/0x70abFFA49E84860F06E91c7809D0D87B73166f25
+### XDC:
 
 
+## Deployment 
 
-## Foundry
+### front-end
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+```shell
+cd react
+yarn
+yarn dev
+```
 
-Foundry consists of:
-
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
+### Foundry
 ```shell
 $ forge build
 ```
-
-### Test
-
 ```shell
 $ forge test
 ```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
 
 ```shell
 $ anvil
 ```
 
-### Deploy
-
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+forge create --rpc-url $rpc_url --private-key $owner_key contracts/PeerReview.sol:PeerReview --constructor-args "mit" 100
 ```
 
-### Cast
-
 ```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+cast send --private-key $owner_key --rpc-url $rpc_url $contract_addr "addAuthor(address)" $author_addr && \
+cast send --private-key $reviewer1_key --rpc-url $rpc_url $contract_addr "addReviewer(address,string[])" $reviewer1_addr "[\"dao\",\"delegate\",\"vote\"]" && \
+cast send --private-key $reviewer2_key --rpc-url $rpc_url $contract_addr "addReviewer(address,string[])" $reviewer2_addr "[\"defi\",\"erc20\"]" && \
+cast send --private-key $reviewer3_key --rpc-url $rpc_url $contract_addr "addReviewer(address,string[])" $reviewer3_addr "[\"nft\",\"erc721\"]" && \
+cast send --private-key $author_key --rpc-url $rpc_url $contract_addr "submitData(string)" "Exploring the impact of DAOs and
+web3 on decentralized governance." && \
+cast send --private-key $owner_key --rpc-url $rpc_url $contract_addr "assignRandomSeedToSubmission(uint256)" 0 && \
+cast send --private-key $owner_key --rpc-url $rpc_url $contract_addr "shuffleReviewers(uint256)" 0 && \
+cast send --private-key $owner_key --rpc-url $rpc_url $contract_addr "findTopReviewersForSubmission(uint256)" 0 && \
+cast send --private-key $reviewer1_key --rpc-url $rpc_url $contract_addr "reviewerVote(uint32,uint256)" 1 0 && \
+cast send --private-key $reviewer2_key --rpc-url $rpc_url $contract_addr "reviewerVote(uint32,uint256)" 1 0 && \
+cast send --private-key $reviewer3_key --rpc-url $rpc_url $contract_addr "reviewerVote(uint32,uint256)" 1 0 && \
+cast send --private-key $owner_key --rpc-url $rpc_url $contract_addr "revealVotes(uint256)" 0 && \
+cast call --private-key $owner_key --rpc-url $rpc_url $contract_addr "getIsApproved(uint256)" 0 && \
 ```
