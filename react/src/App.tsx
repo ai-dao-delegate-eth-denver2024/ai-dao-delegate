@@ -170,6 +170,15 @@ function App() {
           return contract.revealVotes(inputObject.value);
         }}
       />
+      <InteractionForm
+        description="Check if Submission is Approved"
+        defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.getIsApproved(inputObject.value);
+        }}
+        isReadCall={true}
+      />
       Follow @kirill_igum
     </>
   )
