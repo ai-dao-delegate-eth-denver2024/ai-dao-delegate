@@ -60,6 +60,14 @@ function App() {
         }}
         isReadCall={true}
       />
+      <InteractionForm
+        description="Submit Data"
+        defaultInputs={[{ name: "data", value: "", description: "Data to submit" }]}
+        contractFunction={(signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.submitData(inputObject.value);
+        }}
+      />
     </>
   )
 }
