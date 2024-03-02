@@ -14,6 +14,51 @@ interface IInputField {
 
 function App() {
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
+  const createCollection = async () => {
+    const url = 'https://admin-api.phosphor.xyz/v1/collections';
+    const apiKey = import.meta.env.VITE_API_KEY; // Accessing the API key from .env
+
+    const data = {
+      "name": "Collection ABC",
+      "default_item_type_id": null,
+      "image_url": null,
+      "reveal_strategy": "INSTANT",
+      "preview_metadata": null,
+      "editable_metadata": false,
+      "deployment_request": {
+        "type": "PLATFORM",
+        "token_id_assignment_strategy": "AUTOMATIC",
+        "platform": {
+          "symbol": "ABC",
+          "variant": "FlexibleERC721"
+        },
+        "network_id": 59140
+      }
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}` // Using the API key
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Collection created:', result);
+      // Handle success
+    } catch (error) {
+      console.error('Failed to create collection:', error);
+      // Handle error
+    }
+  };
+
 
   return (
     <>
@@ -189,6 +234,8 @@ function App() {
         }}
         isReadCall={true}
       />
+      <button onClick={createCollection}>Create Collection</button>
+
       Follow @kirill_igum
     </>
   )
