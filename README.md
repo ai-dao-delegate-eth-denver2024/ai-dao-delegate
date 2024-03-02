@@ -3,10 +3,16 @@
 ## contract deployed
 
 ### Linea Goerli:
+
+https://goerli.lineascan.build/address/0xb1fEC5fe2d82A189eE793aE9a675eA4a7caC6e99
+
+
 uses Phosphor and Verax
 ### inco:
-uses full homomorphic encryption for private voting
+
 https://explorer.testnet.inco.org/address/0x70abFFA49E84860F06E91c7809D0D87B73166f25
+
+uses full homomorphic encryption for private voting
 ### XDC:
 
 
