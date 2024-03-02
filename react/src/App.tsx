@@ -54,11 +54,31 @@ function App() {
         }}
       />
       <InteractionForm
+        description="Add Keyword to Reviewer"
+        defaultInputs={[
+          { name: "reviewerIndex", value: "0", description: "Reviewer Index" },
+          { name: "newKeyword", value: "", description: "New Keyword" }
+        ]}
+        contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.addKeywordToReviewer(inputObject1.value, inputObject2.value);
+        }}
+      />
+      <InteractionForm
         description="Get Reviewers"
         defaultInputs={[]}
         contractFunction={async (signer: ethers.Signer) => {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
           return contract.getReviewers();
+        }}
+        isReadCall={true}
+      />
+      <InteractionForm
+        description="Get Reviewer Keywords"
+        defaultInputs={[{ name: "reviewerAddress", value: "", description: "Reviewer Address" }]}
+        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
+          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
+          return contract.getReviewerKeywords(inputObject.value);
         }}
         isReadCall={true}
       />
@@ -90,31 +110,11 @@ function App() {
         isReadCall={true}
       />
       <InteractionForm
-        description="Add Keyword to Reviewer"
-        defaultInputs={[
-          { name: "reviewerIndex", value: "0", description: "Reviewer Index" },
-          { name: "newKeyword", value: "", description: "New Keyword" }
-        ]}
-        contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.addKeywordToReviewer(inputObject1.value, inputObject2.value);
-        }}
-      />
-      <InteractionForm
         description="Get Selected Reviewers"
         defaultInputs={[{ name: "submissionId", value: "0", description: "Submission ID" }]}
         contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
           const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
           return contract.getSelectedReviewers(inputObject.value);
-        }}
-        isReadCall={true}
-      />
-      <InteractionForm
-        description="Get Reviewer Keywords"
-        defaultInputs={[{ name: "reviewerAddress", value: "", description: "Reviewer Address" }]}
-        contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => {
-          const contract = new ethers.Contract(thisContractAddress, PeerReviewAbi, signer);
-          return contract.getReviewerKeywords(inputObject.value);
         }}
         isReadCall={true}
       />
