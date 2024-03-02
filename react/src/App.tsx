@@ -13,12 +13,22 @@ interface IInputField {
 }
 
 function App() {
-  const thisContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
 
   return (
     <>
-      <div>
+      <div style={{ marginBottom: '20px' }}>
         <MetaMaskButton theme={"light"} color="white"></MetaMaskButton>
+        <div>
+          <label htmlFor="contractAddress">Contract Address:</label>
+          <input
+            id="contractAddress"
+            type="text"
+            value={thisContractAddress}
+            onChange={(e) => setThisContractAddress(e.target.value)}
+            style={{ marginLeft: '10px' }}
+          />
+        </div>
       </div>
       <h1>peer tunning AI</h1>
 
