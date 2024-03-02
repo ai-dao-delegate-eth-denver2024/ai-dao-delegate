@@ -46,7 +46,6 @@ contract PeerReview {
         ROI_DENOMINATOR = _roiDenominator;
         owner = msg.sender;
         options = ["Yes", "No"];
-        totalAcceptVotesFhe = TFHE.asEuint32(0x00);
     }
 
     // Function to add an author, only callable by the owner
@@ -315,6 +314,10 @@ contract PeerReview {
             "Votes can only be revealed if countVotes is 3."
         );
         submissions[submissionId].isApproved = (totalAcceptVotes == 3);
+    }
+
+    function initFhe() public {
+        totalAcceptVotesFhe = TFHE.asEuint32(0x00);
     }
 
     function reviewerVoteFhe(uint32 vote, uint256 submissionId) public {
