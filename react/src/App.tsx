@@ -5,6 +5,8 @@ import { ethers } from 'ethers'
 import { InteractionForm } from "./InteractionForm";
 import './App.css'
 import PeerReviewAbi from '../../abi/PeerReview.json'
+import { VeraxSdk } from "@verax-attestation-registry/verax-sdk";
+
 
 interface IInputField {
   name: string;
@@ -14,6 +16,8 @@ interface IInputField {
 
 function App() {
   const [thisContractAddress, setThisContractAddress] = useState("0x5FbDB2315678afecb367f032d93F642f64180aa3");
+  const sdkConf = chain.id === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
+  const veraxSdk = new VeraxSdk(sdkConf, address);
 
   const fetchCollections = async () => {
     const url = 'https://admin-api.phosphor.xyz/v1/collections';
