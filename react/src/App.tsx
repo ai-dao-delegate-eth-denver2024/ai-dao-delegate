@@ -24,7 +24,6 @@ function App() {
   // const sdkConf = chainId === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
   // const veraxSdk = new VeraxSdk(sdkConf, address);
   const sdkConf = VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
-  console.log('sdkConf:', sdkConf);
   const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64");
 
   const [transactionId, setTransactionId] = useState('');
@@ -447,6 +446,15 @@ function App() {
         </div>
         <button onClick={getMintRequest}>get mint request</button>
       </div>
+      {/* <InteractionForm */}
+      {/*   description="Check if Submission is Approved" */}
+      {/*   defaultInputs={[{ name: "tokenId", value: "0", description: "tokenId" }]} */}
+      {/*   contractFunction={async (signer: ethers.Signer, inputObject: IInputField) => { */}
+      {/*     const contract = new ethers.Contract("0x27d73839Cc465Cc3Bd380362b4013FE7c184690D", PeerReviewAbi, signer); */}
+      {/*     return contract.getIsApproved(inputObject.value); */}
+      {/*   }} */}
+      {/*   isReadCall={true} */}
+      {/* /> */}
 
       <button onClick={async () => {
         const SCHEMA = '(bool hasCompletedTutoriall)';
