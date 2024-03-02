@@ -92,7 +92,7 @@ function App() {
       <InteractionForm
         description="Add Keyword to Reviewer"
         defaultInputs={[
-          { name: "reviewerIndex", value: "", description: "Reviewer Index" },
+          { name: "reviewerIndex", value: "0", description: "Reviewer Index" },
           { name: "newKeyword", value: "", description: "New Keyword" }
         ]}
         contractFunction={(signer: ethers.Signer, inputObject1: IInputField, inputObject2: IInputField) => {
