@@ -20,7 +20,7 @@ function App() {
       <div>
         <MetaMaskButton theme={"light"} color="white"></MetaMaskButton>
       </div>
-      <h1>AI DAO Delegate</h1>
+      <h1>peer tunning AI</h1>
 
       <InteractionForm
         description="add author"
