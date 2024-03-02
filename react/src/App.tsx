@@ -23,9 +23,9 @@ function App() {
   // const chainId = network.chainId;
   // const sdkConf = chainId === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
   // const veraxSdk = new VeraxSdk(sdkConf, address);
-  const sdkConf =  VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
+  const sdkConf = VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
   const [transactionId, setTransactionId] = useState('');
-  const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64" );
+  const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64");
 
   const getTransactionDetails = async () => {
     if (!transactionId) {
@@ -448,13 +448,10 @@ function App() {
       </div>
 
       <button onClick={async () => {
+        const SCHEMA = '(bool hasCompletedTutorial)';
         try {
-          const SCHEMA = {
-            // Assuming SCHEMA is defined elsewhere or provided as a constant
-            // Add the SCHEMA object definition here as per your application's requirements
-          };
           const txHash = await veraxSdk.schema.create(
-            "Tutorial Schema",
+            "Tutorial Schema 34327",
             "This Schema is used for the tutorial",
             "https://ver.ax/#/tutorials",
             SCHEMA,
