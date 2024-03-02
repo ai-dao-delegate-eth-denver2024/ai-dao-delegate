@@ -24,9 +24,10 @@ function App() {
   // const sdkConf = chainId === 59144 ? VeraxSdk.DEFAULT_LINEA_MAINNET_FRONTEND : VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
   // const veraxSdk = new VeraxSdk(sdkConf, address);
   const sdkConf = VeraxSdk.DEFAULT_LINEA_TESTNET_FRONTEND;
-  const [transactionId, setTransactionId] = useState('');
+  console.log('sdkConf:', sdkConf);
   const veraxSdk = new VeraxSdk(sdkConf, "0x5873298b68497fad590f68221D9a8d134902DE64");
 
+  const [transactionId, setTransactionId] = useState('');
   const getTransactionDetails = async () => {
     if (!transactionId) {
       alert('Please enter a transaction ID');
@@ -448,12 +449,12 @@ function App() {
       </div>
 
       <button onClick={async () => {
-        const SCHEMA = '(bool hasCompletedTutorial)';
+        const SCHEMA = '(bool hasCompletedTutoriall)';
         try {
           const txHash = await veraxSdk.schema.create(
             "Tutorial Schema 34327",
-            "This Schema is used for the tutorial",
-            "https://ver.ax/#/tutorials",
+            "This Schema is used for thee tutorial",
+            "https://ver.ax/#/tutorials1",
             SCHEMA,
           );
           console.log('Transaction Hash:', txHash);
